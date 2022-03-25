@@ -220,7 +220,4 @@ module.exports = function (app) {
       res.status(404);
     }
   });
-  app.get("/actions", (req, res) => {
-    res.json({ message: "El github actions ta joya" });
-  });
 };
