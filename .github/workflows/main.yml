@@ -23,8 +23,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo Deploy to testing using ${{ secrets.DB_USER }}
-      - run: echo Deploy to testing using ${{ secrets.DB_HOST }}
+      
       - name: declare env
+        run: echo Deploy to testing using ${{ secrets.DB_HOST }}
         env: 
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
