@@ -2,8 +2,8 @@ name: Deploy
 
 on:
   push:
-    branches:
-      - develop
+    branches: [ develop, dev-test ]
+
 
 jobs:
   build:
@@ -15,3 +15,14 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "dev-back-startamericas" #Must be unique in Heroku
           heroku_email: "ucb.start.project@gmail.com"
+
+  deploy-develop:
+    name: Deploy to testing
+    environment:
+      name: Develop
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo Deploy to testing using ${{ secrets.DB_USER }}
+      - run: echo Deploy to testing using ${{ secrets.DB_HOST }}
+
+
