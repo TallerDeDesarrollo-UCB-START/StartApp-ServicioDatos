@@ -22,8 +22,8 @@ jobs:
       name: Develop
     runs-on: ubuntu-latest
     steps:
-      
       - uses: actions/checkout@v2
+      - name: create env file
         run: |
           touch .env
           echo DB_USER=${{ secrets.DB_USER }} >> .env
