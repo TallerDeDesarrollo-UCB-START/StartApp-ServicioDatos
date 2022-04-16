@@ -25,17 +25,20 @@ jobs:
       - uses: actions/checkout@v2
       - name: create env file
         run: touch .env
-  
+        # run: echo DB_USER=${{ secrets.DB_USER }} >> .env
+        # run: echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
+        # run: echo DB_HOST=${{ secrets.DB_HOST }} >> .env
+        # run: echo DB_DATABASE=${{ secrets.DB_DATABASE }} >> .env
 
 
 
-  create-envfile:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Make env file
-      uses: SpicyPizza/create-envfile@v1.3
-      with:
-        envkey_DB_USER: ${{ secrets.DB_USER }}
-        envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        envkey_DB_HOST: ${{ secrets.DB_HOST }}
-        envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
+  # create-envfile:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Make env file
+  #     uses: SpicyPizza/create-envfile@v1.3
+  #     with:
+  #       envkey_DB_USER: ${{ secrets.DB_USER }}
+  #       envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+  #       envkey_DB_HOST: ${{ secrets.DB_HOST }}
+  #       envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
