@@ -25,7 +25,7 @@ jobs:
       - run: echo Deploy to testing using ${{ secrets.DB_USER }}
       
       - name: create env file
-        run: |
+        run:
           touch .env
           echo DB_USER=${{ secrets.DB_USER }} >> .env
           echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
