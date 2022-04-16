@@ -15,3 +15,19 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "dev-back-startamericas" #Must be unique in Heroku
           heroku_email: "ucb.start.project@gmail.com"
+
+  deploy-develop:
+    name: Deploy to Develop
+    environment:
+      name: Develop
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo Deploy to testing using ${{ secrets.DB_USER }}
+      
+      - name: declare env
+        run: echo Deploy to testing using ${{ secrets.DB_HOST }}
+        env: 
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_DATABASE: ${{ secrets.DB_DATABASE }}
