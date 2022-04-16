@@ -25,9 +25,24 @@ jobs:
       - run: echo Deploy to testing using ${{ secrets.DB_USER }}
       
       - name: create env file
-        run:
+        run: |
           touch .env
           echo DB_USER=${{ secrets.DB_USER }} >> .env
           echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
           echo DB_HOST=${{ secrets.DB_HOST }} >> .env
           echo DB_DATABASE=${{ secrets.DB_DATABASE }} >> .env
+
+
+  create-envfile:
+    runs-on: ubuntu-latest
+    environment:
+      name: Develop
+    steps:
+    - name: Make env file
+      uses: SpicyPizza/create-envfile@v1.3
+      with:
+        envkey_DB_USER: ${{ secrets.B_USE }}
+        envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        envkey_DB_HOST: ${{ secrets.DB_HOST }}
+        envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
+        file_name: .env
