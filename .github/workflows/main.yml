@@ -22,9 +22,8 @@ jobs:
       name: Develop
     runs-on: ubuntu-latest
     steps:
-      - run: echo Deploy to testing using ${{ secrets.DB_USER }}
       
-      - name: create env file
+      - uses: actions/checkout@v2
         run: |
           touch .env
           echo DB_USER=${{ secrets.DB_USER }} >> .env
@@ -33,7 +32,7 @@ jobs:
           echo DB_DATABASE=${{ secrets.DB_DATABASE }} >> .env
 
 
-          
+
   create-envfile:
     runs-on: ubuntu-latest
     environment:
