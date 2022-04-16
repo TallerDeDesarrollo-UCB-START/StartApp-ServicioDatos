@@ -32,7 +32,6 @@ jobs:
           echo DB_HOST=${{ secrets.DB_HOST }} >> .env
           echo DB_DATABASE=${{ secrets.DB_DATABASE }} >> .env
 
-
   create-envfile:
     runs-on: ubuntu-latest
     environment:
