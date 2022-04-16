@@ -16,7 +16,7 @@ jobs:
           heroku_app_name: "dev-back-startamericas" #Must be unique in Heroku
           heroku_email: "ucb.start.project@gmail.com"
 
-deploy-develop:
+  deploy-develop:
     name: Deploy to Develop
     environment:
       name: Develop
