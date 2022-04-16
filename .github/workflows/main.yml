@@ -20,10 +20,10 @@ jobs:
     name: Deploy to Develop
     environment:
       name: Develop
-      DB_USER: ${{ secrets.DB_USER }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      DB_HOST: ${{ secrets.DB_HOST }}
-      DB_DATABASE: ${{ secrets.DB_DATABASE }}
+        DB_USER: ${{ secrets.DB_USER }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DB_HOST: ${{ secrets.DB_HOST }}
+        DB_DATABASE: ${{ secrets.DB_DATABASE }}
     runs-on: ubuntu-latest
     steps:
       - run: echo Deploy to testing using ${{ secrets.DB_USER }}
