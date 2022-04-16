@@ -35,8 +35,6 @@ jobs:
 
   create-envfile:
     runs-on: ubuntu-latest
-    environment:
-      name: Develop
     steps:
     - name: Make env file
       uses: SpicyPizza/create-envfile@v1.3
@@ -45,4 +43,3 @@ jobs:
         envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         envkey_DB_HOST: ${{ secrets.DB_HOST }}
         envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
-        file_name: .env
