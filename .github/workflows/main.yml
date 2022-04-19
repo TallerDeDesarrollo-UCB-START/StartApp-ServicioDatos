@@ -25,22 +25,24 @@ jobs:
       name: Develop
     runs-on: ubuntu-latest
     steps:
-      - name: Run ENV
-        run: echo Deploy to production using ${{ secrets.DB_USER }}
-        env:
-          DB_USER: ${{ secrets.DB_USER }}
+      - name: Set the value
+        id: step_one
+        run: |
+          echo DB_USER=${{ secrets.DB_USER }} >> $GITHUB_ENV
+      - name: Use the value
+        id: step_two
+        run: |
+          echo "${{ env.DB_USER }}" # This will output 'yellow'
       - run: export
+      # - name: Run ENV
+      #   run: echo Deploy to production using ${{ secrets.DB_USER }}
+      #   env:
+      #     DB_USER: ${{ secrets.DB_USER }}
+      # - run: export
 
 
 
-      # - name: Set the value
-      #   id: step_one
-      #   run: |
-      #     echo DB_USER=${{ secrets.DB_USER }} >> $GITHUB_ENV
-      # - name: Use the value
-      #   id: step_two
-      #   run: |
-      #     echo "${{ env.DB_USER }}" # This will output 'yellow'
+
 
 # basura:
             # run: echo DB_USER=${{ secrets.DB_USER }} >> .env
