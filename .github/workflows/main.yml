@@ -19,17 +19,29 @@ jobs:
           heroku_app_name: "dev-back-startamericas" #Must be unique in Heroku
           heroku_email: "ucb.start.project@gmail.com"
 
+  # deploy-develop:
+  #   name: Deploy to Develop
+  #   environment:
+  #     name: Develop
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Set the value
+  #     - env:                                   <---
+  #       DB_USER: ${{ secrets.DB_USER }}      <---
+  #     - run: export                            <---
+  #     - run: env
+
+
+
   deploy-develop:
     name: Deploy to Develop
     environment:
       name: Develop
-    runs-on: ubuntu-latest
     steps:
-      - name: Set the value
-      - env:                                   <---
-        DB_USER: ${{ secrets.DB_USER }}      <---
-      - run: export                            <---
-      - run: env
+    - uses: actions/checkout@v2
+      env:  
+        DB_USER: ${{ secrets.DB_USER }} 
+    - run: export 
       # - run: |
       #     echo "${{ env.DB_USER }}" # This will output 'yellow'
       #   run: |
