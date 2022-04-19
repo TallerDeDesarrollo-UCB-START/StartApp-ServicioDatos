@@ -27,8 +27,8 @@ jobs:
     steps:
       - name: Set the value
       - env:                                   <---
-          DB_USER: ${{ secrets.DB_USER }}      <---
-        run: export                            <---
+        DB_USER: ${{ secrets.DB_USER }}      <---
+      - run: export                            <---
       - run: env
       # - run: |
       #     echo "${{ env.DB_USER }}" # This will output 'yellow'
