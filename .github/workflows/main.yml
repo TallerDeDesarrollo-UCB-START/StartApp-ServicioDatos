@@ -21,6 +21,8 @@ jobs:
 
   deploy-develop:
     name: Deploy to Develop
+    environment:
+      name: Develop
     runs-on: ubuntu-latest
     steps:
       - name: Set the value
