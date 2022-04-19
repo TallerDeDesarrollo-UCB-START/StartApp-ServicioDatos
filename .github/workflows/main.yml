@@ -28,8 +28,8 @@ jobs:
       - name: Run ENV
         run: echo Deploy to production using ${{ secrets.DB_USER }}
         env:
-          CI: true
           DB_USER: ${{ secrets.DB_USER }}
+        run: export
 
 
 
