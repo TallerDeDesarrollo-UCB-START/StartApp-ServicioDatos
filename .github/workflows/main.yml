@@ -6,8 +6,6 @@ on:
       - develop
 
 
-environment:
-  name: Develop
 
 
 jobs:
