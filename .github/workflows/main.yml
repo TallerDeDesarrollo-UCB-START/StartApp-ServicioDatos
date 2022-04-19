@@ -29,7 +29,7 @@ jobs:
         run: echo Deploy to production using ${{ secrets.DB_USER }}
         env:
           DB_USER: ${{ secrets.DB_USER }}
-        run: export
+      - run: export
 
 
 
