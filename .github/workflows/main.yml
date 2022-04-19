@@ -26,7 +26,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set the value
-        id: step_one
+      - env:                                   <---
+        DB_USER: ${{ secrets.DB_USER }}      <---
+        run: export                            <---
+      - run: env
+      - run: |
+          echo "${{ env.DB_USER }}" # This will output 'yellow'
         run: |
           echo DB_USER=${{ secrets.DB_USER }} >> $GITHUB_ENV
       - name: Use the value
