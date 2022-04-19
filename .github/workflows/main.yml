@@ -21,13 +21,14 @@ jobs:
     name: Deploy to Develop
     environment:
       name: Develop
-      # DB_USER: ${{ secrets.DB_USER }}
+    env:
+      DB_USER: ${{ secrets.DB_USER }}
     runs-on: ubuntu-latest
     steps:
       - name: Run ENV
         run: echo Deploy to production using ${{ secrets.DB_USER }}
-      - env:
-        DB_USER: ${{ secrets.DB_USER }}
+        # env:
+        #   DB_USER: ${{ secrets.DB_USER }}
       # - run: export
 
 
