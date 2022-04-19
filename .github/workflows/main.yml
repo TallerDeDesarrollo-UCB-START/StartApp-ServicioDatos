@@ -27,17 +27,17 @@ jobs:
     steps:
       - name: Set the value
       - env:                                   <---
-        DB_USER: ${{ secrets.DB_USER }}      <---
+          DB_USER: ${{ secrets.DB_USER }}      <---
         run: export                            <---
       - run: env
-      - run: |
-          echo "${{ env.DB_USER }}" # This will output 'yellow'
-        run: |
-          echo DB_USER=${{ secrets.DB_USER }} >> $GITHUB_ENV
-      - name: Use the value
-        id: step_two
-        run: |
-          echo "${{ env.DB_USER }}" # This will output 'yellow'
+      # - run: |
+      #     echo "${{ env.DB_USER }}" # This will output 'yellow'
+      #   run: |
+      #     echo DB_USER=${{ secrets.DB_USER }} >> $GITHUB_ENV
+      # - name: Use the value
+      #   id: step_two
+      #   run: |
+      #     echo "${{ env.DB_USER }}" # This will output 'yellow'
 
 # basura:
             # run: echo DB_USER=${{ secrets.DB_USER }} >> .env
