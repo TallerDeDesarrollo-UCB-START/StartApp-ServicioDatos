@@ -25,6 +25,8 @@ jobs:
       name: Develop
     runs-on: ubuntu-latest
     steps:
+      -env:
+        DB_USER: ${{ secrets.DB_USER }}
       - name: Set the value
         id: step_one
         run: |
@@ -33,6 +35,7 @@ jobs:
         id: step_two
         run: |
           echo "${{ env.DB_USER }}" # This will output 'yellow'
+          echo "${{ DB_USER }}" # This will output 'yellow'
 
 # basura:
             # run: echo DB_USER=${{ secrets.DB_USER }} >> .env
