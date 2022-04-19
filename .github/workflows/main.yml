@@ -34,7 +34,6 @@ jobs:
       - name: Use the value
         id: step_two
         run: |
-          echo "${{ env.DB_USER }}" # This will output 'yellow'
           echo "${{ DB_USER }}" # This will output 'yellow'
 
 # basura:
