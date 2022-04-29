@@ -100,7 +100,7 @@ jobs:
 
   deploy_to_master:
     name: Deploy to master
-    needs: [deploy_to_heroku_develop, sonarcloud]
+    needs: [deploy_to_heroku, sonarcloud]
     environment:
       name: produccion
     runs-on: ubuntu-latest
