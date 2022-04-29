@@ -4,9 +4,9 @@ name: Deploy to Heroku
 on:
   push:
     branches:
-      - develop
+      - master
     pull_request:
-      - develop
+      - master
 
 jobs:
   deploy_to_heroku:
