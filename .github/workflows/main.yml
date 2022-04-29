@@ -1,0 +1,115 @@
+name: Deploy to Heroku
+
+
+on:
+  push:
+    branches:
+      - develop
+    pull_request:
+      - develop
+
+jobs:
+  deploy_to_heroku:
+    name: Deploy to develop
+    environment:
+      name: desarrollo
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: 'develop'
+      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY_DEPLOY}}
+          heroku_app_name: "dev-back-startamericas" #Must be unique in Heroku
+          heroku_email: "ucb.start.project@gmail.com"
+
+
+
+#  deploy-develop:
+#    name: Deploy to Develop
+#    environment:
+#      name: Develop
+#    env:
+#      DB_USER: ${{ secrets.DB_USER }}
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Run ENV
+#        run: echo Deploy to production using ${{ secrets.DB_USER }}
+
+        # env:
+        #   DB_USER: ${{ secrets.DB_USER }}
+      # - run: export
+
+
+      # - name: Set the value
+      #   id: step_one
+      #   run: |
+      #     echo DB_USER=${{ secrets.DB_USER }} >> $GITHUB_ENV
+      # - name: Use the value
+      #   id: step_two
+      #   run: |
+      #     echo "${{ env.DB_USER }}" # This will output 'yellow'
+      # - run: export
+
+
+# basura:
+            # run: echo DB_USER=${{ secrets.DB_USER }} >> .env
+            # run: echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
+            # run: echo DB_HOST=${{ secrets.DB_HOST }} >> .env
+            # run: echo DB_DATABASE=${{ secrets.DB_DATABASE }} >> .env
+
+
+
+  # create-envfile:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Make env file
+  #     uses: SpicyPizza/create-envfile@v1.3
+  #     with:
+  #       envkey_DB_USER: ${{ secrets.DB_USER }}
+  #       envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+  #       envkey_DB_HOST: ${{ secrets.DB_HOST }}
+  #       envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
+
+  sonarcloud:
+    name: Build (Sonar Cloud)
+    needs: [deploy_to_heroku]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        # Disabling shallow clone is recommended for improving relevancy of reporting
+        fetch-depth: 0
+        ref: 'develop'
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+
+    - name: Node install dependencies
+      run: npm install
+
+#    - name: Run unit tests
+#      run: npm run test
+    
+    - name: SonarCloud Scan
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  deploy_to_heroku:
+    name: Deploy to develop
+    needs: [deploy_to_heroku_develop, sonarcloud]
+    environment:
+      name: produccion
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: 'master'
+      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY_DEPLOY}}
+          heroku_app_name: "startamericastogether" #Must be unique in Heroku
+          heroku_email: "ucb.start.project@gmail.com"
