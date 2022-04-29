@@ -98,8 +98,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  deploy_to_heroku:
-    name: Deploy to develop
+  deploy_to_master:
+    name: Deploy to master
     needs: [deploy_to_heroku_develop, sonarcloud]
     environment:
       name: produccion
