@@ -67,7 +67,6 @@ jobs:
   #       envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
   #       envkey_DB_HOST: ${{ secrets.DB_HOST }}
   #       envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
-
   sonarcloud:
     name: Build (Sonar Cloud)
     needs: [deploy_to_heroku]
