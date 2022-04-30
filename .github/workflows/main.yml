@@ -30,6 +30,9 @@ jobs:
       DB_USER: ${{ secrets.DB_USER }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: 'develop'
       - name: Run ENV
         run: echo Deploy to production using ${{ secrets.DB_USER }}
 
