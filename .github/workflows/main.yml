@@ -25,16 +25,7 @@ jobs:
           heroku_app_name: "dev-back-startamericas" #Must be unique in Heroku
           heroku_email: "ucb.start.project@gmail.com"
 
-  deploy-develop:
-    name: Deploy to Develop
-    environment:
-      name: Develop
-    env:
-      DB_USER: ${{ secrets.DB_USER }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run ENV
-        run: echo Deploy to production using ${{ secrets.DB_USER }}
+
 
         # env:
         #   DB_USER: ${{ secrets.DB_USER }}
