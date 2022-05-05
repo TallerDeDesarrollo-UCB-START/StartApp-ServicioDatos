@@ -38,7 +38,7 @@ bower_components
 build/Release
 
 #environments files
-.env
+# .env
 
 # Dependency directories
 node_modules/
