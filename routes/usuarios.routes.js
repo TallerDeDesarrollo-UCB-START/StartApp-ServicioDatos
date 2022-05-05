@@ -137,10 +137,5 @@ module.exports = function (app) {
   });
 
 
-  app.get("/showcred", async (req, res) => {
-      res.send(`{las credenciales son las siguientes ${process.env.DB_USER}
-      ${process.env.DB_PASSWORD}${process.env.DB_DATABASE}${process.env.DB_HOST}}`)
-  });
-
 };
 

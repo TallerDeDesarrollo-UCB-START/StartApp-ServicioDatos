@@ -19,7 +19,7 @@ const pool = new Pool({
     password: process.env.DB_PASSWORD, //use your pass my friend
     database: process.env.DB_DATABASE,
     host: process.env.DB_HOST,
-    port: 5432,
+    port: process.env.DB_PORT,
     ssl: {
       rejectUnauthorized: false,
     },
