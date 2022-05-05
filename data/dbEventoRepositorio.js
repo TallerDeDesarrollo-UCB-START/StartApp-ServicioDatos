@@ -1,6 +1,9 @@
 const { pool } = require("../config/pool.config");
 
 module.exports = pool;
+
+
+
 class DbEventoRepositorio {
   constructor() {
     this.cursor = null;

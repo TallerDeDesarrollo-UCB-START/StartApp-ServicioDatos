@@ -12,6 +12,16 @@ class DbProyectoRepositorio {
       ON p.categoria_id = categoria_proyectos.id
 	    WHERE p.estado=true`
     );
+    console.log(process.env.DB_USER);
+    console.log(process.env.DB_USER);
+    console.log(process.env.DB_PASSWORD);
+    console.log(process.env.DB_PASSWORD);
+    console.log(process.env.DB_HOST);
+    console.log(process.env.DB_HOST);
+    console.log(process.env.DB_DATABASE);
+    console.log(process.env.DB_DATABASE);
+    console.log(process.env.DB_PORT);
+    console.log(process.env.DB_PORT);
     return proyectos;
   }
   async get_proyecto(data) {
