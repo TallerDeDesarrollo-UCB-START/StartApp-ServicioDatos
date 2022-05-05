@@ -11,20 +11,7 @@ on:
 jobs:
   deploy_to_heroku:
     name: Deploy to develop
-    needs: [set_environments]
-    environment:
-      name: desarrollo
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY_DEPLOY}}
-          heroku_app_name: "dev-back-startamericas" #Must be unique in Heroku
-          heroku_email: "ucb.start.project@gmail.com"
-
-  set_environments:
-    name: Set environments variables
+    # needs: [set_environments]
     environment:
       name: desarrollo
     runs-on: ubuntu-latest
@@ -39,3 +26,10 @@ jobs:
           echo DB_USER=${{ secrets.DB_USER }} >> .env
           cat .env
       - run: npm ci && npm run build
+      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY_DEPLOY}}
+          heroku_app_name: "dev-back-startamericas" #Must be unique in Heroku
+          heroku_email: "ucb.start.project@gmail.com"
+
+
