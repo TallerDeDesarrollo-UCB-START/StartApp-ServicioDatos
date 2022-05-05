@@ -18,8 +18,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
-          ls -al
-          rm .env
           touch .env
           echo DB_DATABASE=${{ secrets.DB_DATABASE }} >> .env
           echo DB_HOST=${{ secrets.DB_HOST }} >> .env
@@ -27,7 +25,6 @@ jobs:
           echo DB_PORT=${{ secrets.DB_PORT }} >> .env
           echo DB_USER=${{ secrets.DB_USER }} >> .env
           cat .env
-          ls -al
       - run: npm install
       - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
