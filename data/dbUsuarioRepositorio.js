@@ -23,16 +23,6 @@ class DbUsuarioRepositorio {
     const users = await pool.query(
       "SELECT  nombre, apellido, fecha_de_nacimiento, pais_de_recidencia, ciudad_de_recidencia, carrera, ocupacion, telefono, genero, rol, estado_de_cuenta, estado_de_disponibilidad, foto_url, id_usuario, nombre_contacto_de_emergencia, numero_contacto_de_emergencia, relacion_contacto_de_emergencia FROM usuarios ORDER BY apellido"
     );
-    console.log(process.env.DB_USER);
-    console.log(process.env.DB_USER);
-    console.log(process.env.DB_PASSWORD);
-    console.log(process.env.DB_PASSWORD);
-    console.log(process.env.DB_HOST);
-    console.log(process.env.DB_HOST);
-    console.log(process.env.DB_DATABASE);
-    console.log(process.env.DB_DATABASE);
-    console.log(process.env.DB_PORT);
-    console.log(process.env.DB_PORT);
     return users;
   }
 
