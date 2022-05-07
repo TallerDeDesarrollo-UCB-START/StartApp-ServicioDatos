@@ -11,29 +11,33 @@ class EventoServicio {
         throw new Error("Por favor ingrese un nombre del evento");
       }
     } catch (error) {
-      console.error(error.message);
       return false;
     }
     return true;
   }
 
   async get_eventos(data) {
-    return await this.repository.get_eventos(data);
+    try {
+      return await this.repository.get_eventos(data);
+    } catch (error) {
+      throw error;
+    }
   }
-  async get_categorias(data) {
-    return await this.repository.get_categorias(data);
-  }
-  async get_eventos(data) {
-    return await this.repository.get_eventos(data);
-  }
-
   //Obtener eventos de participacion de un usuario
   async get_categorias(data) {
-    return await this.repository.get_categorias(data);
+    try {
+      return await this.repository.get_categorias(data);
+    } catch (error) {
+      throw error;
+    }
   }
 
   async get_participantes_eventos(data) {
-    return await this.repository.get_participantes_eventos(data);
+    try {
+      return await this.repository.get_participantes_eventos(data);
+    } catch (error) {
+      throw error;
+    }
   }
 
   //Eliminar participacion en un evento
@@ -41,17 +45,28 @@ class EventoServicio {
     try {
       return await this.repository.eliminar_participacion(idEvento, idUsuario);
     } catch (error) {
-      console.error("Error al eliminar participacion");
-      return error;
+      throw error;
     }
   }
 
   async get_eventos_usuario(data) {
-    return await this.repository.get_eventos_usuario(data);
+    try {
+      return await this.repository.get_eventos_usuario(data);
+    } catch (error) {
+      throw error;
+    }
   }
 
   async get_evento(data) {
-    return await this.repository.get_evento(data);
+    try {
+      var req = await this.repository.get_evento(data);
+      console.error(req.rows)
+      if ( req.rows.length == 0)
+       throw Error("El evento no existe.");
+      return req;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async create_evento(data) {
@@ -59,11 +74,10 @@ class EventoServicio {
       if (this.validar(data)) {
         return await this.repository.create_evento(data);
       } else {
-        throw console.error("Algo inesperado paso con el repositorio");
+        throw new Error("El formulario esta incompleto");
       }
     } catch (error) {
-      console.error(error.message);
-      return error;
+      throw error;
     }
   }
 
@@ -72,11 +86,10 @@ class EventoServicio {
       if (this.validar(data)) {
         return await this.repository.delete_evento(data);
       } else {
-        throw console.error("Algo inesperado paso con el repositorio");
+        throw new Error("Algo inesperado paso con el repositorio");
       }
     } catch (error) {
-      console.error(error.message);
-      return error;
+      throw error;
     }
   }
   // actualizar estado para archivar
@@ -85,11 +98,10 @@ class EventoServicio {
       if (this.validar(data)) {
         return await this.repository.update_evento_estado1(data);
       } else {
-        throw console.error("Algo inesperado paso con el repositorio");
+        throw new Error("Algo inesperado paso con el repositorio");
       }
     } catch (error) {
-      console.error(error.message);
-      return error;
+      throw error;
     }
   }
   //actualizar estado para mostrar
@@ -98,11 +110,10 @@ class EventoServicio {
       if (this.validar(data)) {
         return await this.repository.update_evento_estado2(data);
       } else {
-        throw console.error("Algo inesperado paso con el repositorio");
+        throw new Error("Algo inesperado paso con el repositorio");
       }
     } catch (error) {
-      console.error(error.message);
-      return error;
+      throw error;
     }
   }
 
@@ -111,11 +122,10 @@ class EventoServicio {
       if (this.validar(data)) {
         return await this.repository.actualizar_evento(data, id);
       } else {
-        throw console.error("Error al actualizar evento!");
+        throw new Error("Error al actualizar evento!");
       }
     } catch (error) {
-      console.error(error.message);
-      return error;
+      throw error;
     }
   }
 
@@ -123,13 +133,17 @@ class EventoServicio {
     try {
       return await this.repository.participate_evento(id, id_autenticacion);
     } catch (error) {
-      throw console.error("El " + id.toString() + " del evento no existe");
+      throw new Error("El " + id.toString() + " del evento no existe.");
     }
   }
 
   //Obtener Lideres
   async get_lideres(data) {
-    return await this.repository.get_lideres(data);
+    try {
+      return await this.repository.get_lideres(data);
+    } catch (error) {
+      throw error;
+    }
   }
 
   //Obtener participaciones en eventos de 1 voluntario
@@ -150,9 +164,7 @@ class EventoServicio {
       });
       return sorted_list;
     } catch (error) {
-      throw console.error(
-        "Algo inesperado paso con la Base de datos o el id del participante no existe"
-      );
+      throw new Error("Algo inesperado paso con la Base de datos o el id del participante no existe");
     }
   }
 }

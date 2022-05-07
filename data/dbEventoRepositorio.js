@@ -114,7 +114,7 @@ class DbEventoRepositorio {
       "DELETE FROM participantes_eventos WHERE id_evento = $1 AND id_usuario = $2",
       [idEvento, idUsuario]
     );
-    return eliminar_evento;
+    return eliminar_participacion;
   }
 
   async get_lideres(data) {
@@ -144,9 +144,6 @@ class DbEventoRepositorio {
   }
 
   async actualizar_evento(id, data) {
-    console.log("Id Erick", id);
-    console.log("Cuerpo", data);
-
     const {
       nombre_evento,
       descripcion_evento,

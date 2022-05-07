@@ -35,22 +35,17 @@ module.exports = function (app) {
         result=imagen.rowCount>=1   
       }
       try {
-        if (nuevoProyecto.rows.length > 0 ) {
+        if (-13 > 0 ) {
           res.status(201).json(nuevoProyecto.rows);       
         }
         else {
-          res
-        .status(404)
-        .send('Algo inesperado paso el Proyecto no fue creado');
+          throw new Error('Algo inesperado paso el Proyecto no fue creado');
         }
-      } catch(err) {        
-        console.error(err.message);
-        res
-        .status(404)
-        .send('Algo inesperado paso el Proyecto no fue creado');
+      } catch(error) {        
+        res.status(404).send(`${error.message}`);
       } 
-    } catch (err) {
-      res.status(404);
+    } catch (error) {
+      res.status(404).send(`No se pudo crear el proyecto, ${error.message}`);
     }
   });
   
@@ -75,31 +70,25 @@ module.exports = function (app) {
         }
         else
         {
-          res
-        .status(404)
-        .send('Algo inesperado paso el Proyecto no fue actualizado');
+          throw new Error('Algo inesperado paso el Proyecto no fue actualizado');
         }
       }
-      catch(err)
+      catch(error)
       {
-        console.error(err.message);
-        res
-        .status(404)
-        .send('Algo inesperado paso el Proyecto no fue actualizado');
+        throw error;
       }
       
     } catch (error) {
-      res.status(404);
+      res.status(404).send(`No se pudo editar el proyecto con id ${req.params["id"]}, ${error.message}`);
     }
   });
-  //Eliminar por ide
   app.delete("/delete_proyecto/:id", async (req, res) => {
     try {
       const { id } = req.params;
       const proyectoElimanado = await service.delete_proyecto(id);
       res.status(200).json(proyectoElimanado.rows);
     } catch (error) {
-      res.status(500);
+      res.status(404).send(`No se pudo eliminar el proyecto con id ${req.params["id"]}, ${error.message}`);
     }
   });
   //Obtener
@@ -114,15 +103,15 @@ module.exports = function (app) {
         }
         else
         {
-          res.status(204).json([]);
+          throw new Error("error");
         }
       }
-      catch(err)
+      catch(error)
       {
         res.status(204).json([]);
       }
-    } catch (err) {
-      res.status(404);
+    } catch (error) {
+      res.status(404).send(`No se pudo obtener los proyectos, ${error.message}`);
     }
   });
   //Obtener
@@ -137,15 +126,15 @@ module.exports = function (app) {
         }
         else
         {
-          res.status(204).json([]);
+          throw new Error("error");
         }
       }
-      catch(err)
+      catch(error)
       {
         res.status(204).json([]);
       }
-    } catch (err) {
-      return res.status(404);
+    } catch (error) {
+      return res.status(404).send(`No se pudo obtener el proyecto con id ${req.params["id"]}, ${error.message}`);
     }
   });
   //Participar en proyecto
@@ -159,8 +148,8 @@ module.exports = function (app) {
           id_autenticacion
         );
         res.status(200).json(proyecto_a_actualizar);
-      } catch (err) {
-        res.status(404);
+      } catch (error) {
+        res.status(404).send(`No se pudo participar en el proyecto con id ${req.params["id"]}, ${error.message}`);
       }
     }
   );
@@ -171,8 +160,8 @@ module.exports = function (app) {
         const {id,id_autenticacion}= req.params;
         const esta_participando=await service.participation(id,id_autenticacion);
         res.status(200).json(esta_participando);
-      }catch(err){
-        res.status(404);
+      }catch(error){
+        res.status(404).send(`No se pudo participar en el proyecto con id ${req.params["id"]}, ${error.message}`);
       }
     }
   )
@@ -182,10 +171,10 @@ module.exports = function (app) {
       const {id}= req.params;
       const lista_simple = await service.get_participantes_proyecto_simple(id);
       if(lista_simple==false)
-        res.status(404).send("El id: "+ parseInt(id).toString()  +    " no existe");
+        res.status(404).send("El proyecto con id: "+ parseInt(id).toString()  +    " no existe");
       res.status(200).json(lista_simple.rows);
-    } catch (err) {
-      res.status(404);
+    } catch (error) {
+      res.status(404).send(`No se pudo obtener las lista en el proyecto con id ${req.params["id"]}, ${error.message}`);
     }
   });
   //Obtener Proyectos por categoria
@@ -201,15 +190,15 @@ module.exports = function (app) {
         }
         else
         {
-          res.status(204).json([]);
+          throw new Error("error");
         }
       }
-      catch(err)
+      catch(error)
       {
         res.status(204).json([]);
       }
-    } catch (err) {
-      res.status(404);
+    } catch (error) {
+      res.status(404).send(`No se pudo obtener las lista en el proyecto con la categoria ${req.params["categoria"]}, ${error.message}`);
     }
   });
 
@@ -224,19 +213,18 @@ module.exports = function (app) {
         }
         else
         {
-          res.status(204).json([]);
+          throw new Error("Error");
         }
       }
-      catch(err)
+      catch(error)
       {
         res.status(204).json([]);
       }
-    } catch (err) {
-      res.status(404);
+    } catch (error) {
+      res.status(404).send(`No se pudo obtener las categorias del proyecto con el id ${req.params["id"]}, ${error.message}`);
     }
   });
 
-  //Cancelar participacion de un voluntario en el proyecto
     app.delete("/cancel_participate_proyecto/:id/sesion/:id_autenticacion",async (req, res) => {
       try {
         const { id, id_autenticacion } = req.params;
@@ -245,25 +233,24 @@ module.exports = function (app) {
           id_autenticacion
         );
         res.status(200).json(voluntario_retirado);
-      } catch (err) {
-        res.status(404);
+      } catch (error) {
+        res.status(404).send(`No se pudo eliminar la participacion del usuario del proyecto con el id ${req.params["id"]}, ${error.message}`);
       }
     }
   );
 
-  //Obtener todos los nombres de los proyectos en los que un voluntario esta participando
   app.get("/sesion/:id_autenticacion/get_my_proyectos",async(req,res)=>{
     try{
       const {id_autenticacion}=req.params;
       const mis_proyectos=await service.get_my_proyectos(id_autenticacion);
       if(mis_proyectos==false)
-        res.status(404).send("El id : "+ parseInt(id_autenticacion).toString()  +    " no existe entre los voluntarios");
+        res.status(404).send(`El id : ${parseInt(id_autenticacion).toString()} no existe entre los voluntarios`);
       else
       {
         res.status(200).json(mis_proyectos.rows);
       }
-    }catch(err){
-      res.status(404);
+    }catch(error){
+      res.status(404).send(`No se pudo obtener los proyectos en los que esta el usuario con el id ${req.params["id_autenticacion"]}, ${error.message}`);
     }
   }); 
 
@@ -272,8 +259,8 @@ module.exports = function (app) {
     try {
       const lideres = await service.get_lideres();
       res.status(200).json(lideres.rows);
-    } catch (err) {
-      res.status(404);
+    } catch (error) {
+      res.status(404).send(`No se pudo obtener los lideres, ${error.message}`);
     }
   })
 
@@ -281,8 +268,8 @@ module.exports = function (app) {
     try {
       const roles = await service.get_roles();
       res.status(200).json(roles.rows);
-    } catch (err) {
-      res.status(404);
+    } catch (error) {
+      res.status(404).send(`No se pudo obtener los roles, ${error.message}`);
     }
   })
 
@@ -293,8 +280,8 @@ module.exports = function (app) {
       const {id_autenticacion}=req.params;
       const rol = await service.get_rol(id_autenticacion);
       res.status(200).json(rol.rows);
-    } catch (err) {
-      res.status(404);
+    } catch (error) {
+      res.status(404).send(`No se pudo obtener el rol del usuario con el id ${req.params["id_autenticacion"]}, ${error.message}`);
     }
   })
   //Obtener el numero de participantes de un proyecto
@@ -303,11 +290,11 @@ module.exports = function (app) {
       const { id } = req.params;
       const numero_participantes_proyecto = await service.get_numero_participantes(id);
       res.status(200).json(numero_participantes_proyecto);
-    } catch (err) {
-      res.status(404);
+    } catch (error) {
+      res.status(404).send(`No se pudo obtener el numero de participantes en el proyecto con el id ${req.params["id"]}, ${error.message}`);
     }
   });
-  //Obtener los eventos de un proyecto
+
   app.get("/get_eventos_proyecto/:id",async(req,res)=>{
     try {
       const { id } = req.params;
@@ -320,18 +307,18 @@ module.exports = function (app) {
         }
         else
         {
-          res.status(204).json([]);
+          throw new Error("error");
         }
       }
-      catch(err)
+      catch(error)
       {
         res.status(204).json([]);
       }
-    } catch (err) {
-      res.status(404);
+    } catch (error) {
+      res.status(404).send(`No se pudo obtener los eventos del proyecto con el id ${req.params["id"]}, ${error.message}`);
     }
   });
-  //Obtener Proyectos por estado==Acabado
+
   app.get("/get_proyectos_acabado", async (req, res) => {
     try {
       const proyectos_acabados = await service.get_proyectos_acabado();
@@ -342,12 +329,12 @@ module.exports = function (app) {
           res.status(200).json(proyectos_acabados.rows);
         }
       }
-      catch(err)
+      catch(error)
       {
         res.status(204).json([]);
       }
-    } catch (err) {
-      res.status(404); 
+    } catch (error) {
+      res.status(404).send(`No se pudo obtener los proyecto acabados, ${error.message}`); 
     }
   });
   //Obtener Proyectos por categoria
@@ -361,44 +348,39 @@ module.exports = function (app) {
         {
           res.status(200).json(proyectos_acabados.rows);
         } else  {
-          res.status(200).json([]);
+          throw new Error("error");
         }
       }
-      catch(err)
+      catch(error)
       {
         res.status(204).json([]);
       }
-    } catch (err) {
-      res.status(404); 
+    } catch (error) {
+      res.status(404).send(`No se pudo obtener los proyecto acabados con la categoria ${req.params["categoria"]}, ${error.message}`);  
     }
   });
-  //Registrar como participantes a voluntarios en proyectos pasados
+
   app.put(
     "/participate_past_proyecto/:id_proyecto/sesion/:id_autenticacion/volunteer/:id_volunteer",
     async (req, res) => {
-      
       try {
         const { id_proyecto, id_autenticacion,id_volunteer } = req.params;
         const proyecto_a_actualizar = await service.participate_past_proyecto(id_proyecto,id_autenticacion,id_volunteer)
         res.status(200).json(proyecto_a_actualizar);
-      } catch (err) {
-        res.status(404);
+      } catch (error) {
+        res.status(404).send(`No se pudo meter al usuario ${req.params["id_autenticacion"]} en el proyecto ${req.params["id_proyecto"]}, ${error.message}`);  
       }
     }
   );
 
-
-
-  //Obtener Usuarios espeficifos Id, nombreCompleto, telefono
   app.get("/get_usuarios",async(req,res)=>{
     try {
       const usuarios = await service.get_usuarios();
       res.status(200).json(usuarios.rows);
     } catch (err) {
-      res.status(404);
+      res.status(404).send(`No se pudo obtener los usuarios, ${error.message}`);  
     }
   })
-
 
   app.post("/create_imagen_proyecto/:id_proyecto", imageUpload.single('image'), async (req, res) => {
     try {   
@@ -413,19 +395,17 @@ module.exports = function (app) {
         }
         else 
         {
-          res.status(404)
+          throw new Error("La imagen del proyecto no fue creado.");
         }  
       }
-      catch (err) {
-        res.status(404);
+      catch (error) {
+        res.status(404).send(`No se pudo crear la imagen del proyecto con id ${req.params["id_proyecto"]}, ${error.message}`);
       }
   });
 
-    // Devuelve las imagenes de un proyecto especifico
     app.get('/get_image_proyecto/:id_proyecto',imageUpload.single('image'), async(req, res) => {
       try
       {
-        debugger
         const { id_proyecto } = req.params;
         const imagen =await service.get_imagen(id_proyecto)
         const dir_name=path.resolve();
@@ -434,22 +414,20 @@ module.exports = function (app) {
           .type(imagen.rows[0].mimetype)
           .sendFile(full_file_path)
       }
-      catch(err)
+      catch(error)
       {
-        res.status(404);
+        res.status(404).send(`No se pudo obtener la imagen del proyecto con id ${req.params["id_proyecto"]}, ${error.message}`);
       }
     });
   
-
-  //Lista de eventos por proyecto
   app.get("/eventos_de_proyecto/:proyecto",async(req,res)=>{
     try
     {
       const {proyecto}= req.params;
       const lista_eventos = await service.get_lista_por_proyecto(proyecto);
       res.status(200).json(lista_eventos.rows);
-    }catch(err){
-      res.status(404);
+    }catch(error){
+      res.status(404).send(`No se pudo obtener los eventos del proyecto ${req.params["proyecto"]}, ${error.message}`);
     }
   });
 

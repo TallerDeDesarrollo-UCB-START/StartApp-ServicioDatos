@@ -5,10 +5,18 @@ class usuarioServicio {
   }
 
   async get_volunteer_data(id) {
-    return await this.repository.GetUsuario(id);
+    try{
+      return await this.repository.GetUsuario(id);
+    } catch(error){
+      throw error;
+    }
   }
   async get_volunteers_data() {
-    return await this.repository.GetUsuarios();
+    try{
+      return await this.repository.GetUsuarios();
+    } catch(error){
+      throw error;
+    }
   }
   async register_changes(data) {
     try {
@@ -17,7 +25,7 @@ class usuarioServicio {
       data.estado_de_disponibilidad = "disponible";
       return await this.repository.CreateUsuario(data);
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -29,11 +37,9 @@ class usuarioServicio {
         usuario_a_editar,
         data
       );
-
       return await this.repository.UpdateUsuario(id, data_update);
     } catch (error) {
-      console.log(error);
-      return false;
+      throw error;
     }
   }
   async disable_user(id) {
@@ -41,7 +47,7 @@ class usuarioServicio {
       return await this.repository.disableUser(id);
     } catch (error) {
       console.log(error);
-      return false;
+      throw error;
     }
   }
 
@@ -49,8 +55,7 @@ class usuarioServicio {
     try {
       return await this.repository.GetInsigniasByIdUsuario(id_user);
     } catch (error) {
-      console.log(error);
-      return false;
+      throw error;
     }
   }
 
@@ -58,8 +63,7 @@ class usuarioServicio {
     try {
       return await this.repository.UpdateInsignias(id, data.insignias);
     } catch (error) {
-      console.log(error);
-      return false;
+      throw error;
     }
   }
 
@@ -67,8 +71,7 @@ class usuarioServicio {
     try {
       return await this.repository.GetInsignias();
     } catch (error) {
-      console.log(error);
-      return false;
+      throw error;
     }
   }
   completar_form_a_actualizar(usuario_a_editar, data) {
@@ -97,7 +100,7 @@ class usuarioServicio {
       }
       return data;
     } catch (error) {
-      return false;
+      throw error;
     }
   }
 }
