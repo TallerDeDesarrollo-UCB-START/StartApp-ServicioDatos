@@ -280,8 +280,8 @@ module.exports = function (app) {
       const {id_autenticacion}=req.params;
       const rol = await service.get_rol(id_autenticacion);
       res.status(200).json(rol.rows);
-    } catch (error) {
-      res.status(404).send(`No se pudo obtener el rol del usuario con el id ${req.params["id_autenticacion"]}, ${error.message}`);
+    } catch (err) {
+      res.status(404);
     }
   })
   //Obtener el numero de participantes de un proyecto

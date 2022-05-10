@@ -370,7 +370,7 @@ class DbProyectoRepositorio {
 
   async get_rol(id_autenticacion) {
     const rol = await pool.query(
-      "SELECT rol FROM public.usuarios WHERE id_usuario = $1",
+      "SELECT rol FROM public.usuarios WHERE id_usuario=$1",
       [id_autenticacion]
     );
     return rol;
