@@ -6,7 +6,7 @@ const pool = new Pool({
   password: process.env.DB_PASSWORD, //use your pass my friend
   database: process.env.DB_HOST,
   host: process.env.DB_DATABASE,
-  port: process.env.PORT,
+  port: process.env.DB_PORT,
   ssl: {
     rejectUnauthorized: false,
   },
