@@ -75,6 +75,7 @@ jobs:
           echo DB_PORT=${{ secrets.DB_PORT }} >> .env
           echo DB_USER=${{ secrets.DB_USER }} >> .env
           cat .env
+      - run: npm install
       - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY_DEPLOY}}
