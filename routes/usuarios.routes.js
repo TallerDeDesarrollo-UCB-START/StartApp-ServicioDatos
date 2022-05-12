@@ -9,13 +9,12 @@ module.exports = function (app) {
       res
         .status(201)
         .send(
-          `{"message":"The user informtaion was added", "data": ${data_to_send}}`
+          `{"message":"La informacion del usuario fue agregada", "data": ${data_to_send}}`
         );
-    } catch (err) {
-      console.error(err.message);
+    } catch (error) {
       res
         .status(400)
-        .send('{ "message": "Check the info that you sending", "data": ""}');
+        .send(`{ "message": ${error}, "data": ""}`);
     }
   });
 
@@ -26,13 +25,13 @@ module.exports = function (app) {
       let data_to_send = JSON.stringify(changedVolunteer.rows[0]);
       res
         .status(202)
-        .send(`{"message":"Succesfully Updated!", "data": ${data_to_send}}`);
+        .send(`{"message":"Actualizacion exitosa!", "data": ${data_to_send}}`);
       // res.status(202).send(`{"message":"Succesfully Updated!", "data":true}`);
     } catch (error) {
-      console.error(error.message);
+      //console.error(error.message);
       res
         .status(400)
-        .send(`{"message":"Changes are not commited", "data":false}`);
+        .send(`{"message":"Los cambios no fueron exitosos.", "data":false}`);
     }
   });
 
@@ -48,7 +47,7 @@ module.exports = function (app) {
       res
         .status(204)
         .send(
-          `{ "message": "The volunteer with id ${req.params[0]} does not exit"", "data": ""}`
+          `{ "message": "El voluntario con id ${req.params.id} no existe"", "data": ""}`
         );
     }
   });
@@ -60,9 +59,7 @@ module.exports = function (app) {
       res.status(200).send(`{"message":"", "data": ${data_to_send}}`);
     } catch (err) {
       console.error(err.message);
-      res
-        .status(204)
-        .send(`{ "message": "there are no volunteers", "data": ""}`);
+      res.status(404).send(`{ "message": "No hay usuarios", "data": ""}`);
     }
   });
 
@@ -71,71 +68,59 @@ module.exports = function (app) {
       const insignias = await usuarioService.get_insignias_by_user(
         req.params.id
       );
-      
+
       let data_to_send = JSON.stringify(insignias);
       res.status(200).send(`{"message":"", "data": ${data_to_send}}`);
     } catch (err) {
-      console.error(err.message);
       res
-        .status(204)
-        .send(
-          `{ "message": "The volunteer with id ${req.params[0]} does not exit"", "data": ""}`
-        );
+        .status(404).send(`{ "message": "El usuario con id ${req.params.id} no existe"", "data": ""}`);
     }
   });
-  
+
   app.get("/insignias", async (req, res) => {
     try {
       const insignias = await usuarioService.get_insignias();
-      
+
       let data_to_send = JSON.stringify(insignias.rows);
       res.status(200).send(`{"message":"", "data": ${data_to_send}}`);
-    } catch (err) {
-      console.error(err.message);
-      res
-        .status(204)
-        .send(
-          `{ "message": "The volunteer with id ${req.params[0]} does not exit"", "data": ""}`
-        );
+    } catch (error) {
+      res.status(404).send(`{ "message": "No se pudo recuperar las insignias, ${error.message}"", "data": ""}`);
     }
   });
 
   app.put("/insignias/:id_user", async (req, res) => {
     try {
       let { id_user } = req.params;
-      const changedVolunteer = await usuarioService.update_insignias_by_user_id(id_user, req.body);
+      const changedVolunteer = await usuarioService.update_insignias_by_user_id(
+        id_user,
+        req.body
+      );
       let data_to_send = JSON.stringify(changedVolunteer);
       res
         .status(202)
-        .send(`{"message":"Succesfully Updated!", "data": ${data_to_send}}`);
-      // res.status(202).send(`{"message":"Succesfully Updated!", "data":true}`);
+        .send(`{"message":"Actualizado exitosamente!", "data": ${data_to_send}}`);
     } catch (error) {
-      console.error(error.message);
-      res
-        .status(400)
-        .send(`{"message":"Changes are not commited", "data":false}`);
+      res.status(400).send(`{"message":"Cambios no fueron guardados, ${error.message}", "data":false}`);
     }
   });
   app.delete("/disable_user/:id", async (req, res) => {
     try {
       let stateOfDisable = await usuarioService.disable_user(req.params.id);
-      if (stateOfDisable){
+      if (stateOfDisable) {
         res
-        .status(205)
-        .send(`{"message":"User was disabled succesfully", "data": ${stateOfDisable}}`);
-      }else{
+          .status(205)
+          .send(
+            `{"message":"Usuario fue desahabilitado exitosamente.", "data": ${stateOfDisable}}`
+          );
+      } else {
         res
-        .status(500)
-        .send(`{"message":"User is not disable", "data": ${stateOfDisable}}`);
-      }      
-    }catch (error) {
-      console.error(error.message);
+          .status(500)
+          .send(`{"message":"Usuario no fue desahabilitado.", "data": ${stateOfDisable}}`);
+      }
+    } catch (error) {
       res
         .status(400)
-        .send(`{"message":"Changes are not commited", "data":false}`);
+        .send(`{"message":"Cambios no fueron guardados, ${error.message}", "data":false}`);
     }
   });
-
-
 };
-

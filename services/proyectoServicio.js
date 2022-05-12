@@ -8,11 +8,10 @@ class ProyectoServicio {
     let nombre_proyecto = data["titulo"];
     try {
       if (nombre_proyecto == "") {
-        throw new Error("Por favor ingrese el nombre del proyecto");
+        throw new Error("Por favor ingrese el nombre del proyecto.");
       }
     } catch (error) {
-      console.error(error.message);
-      return false;
+      throw error;
     }
     return true;
   }
@@ -61,8 +60,12 @@ class ProyectoServicio {
     return array;
   }
   async get_proyectos(data) {
-    var resultado = await this.repository.get_proyectos(data);
-    return resultado;
+    try {
+      var resultado = await this.repository.get_proyectos(data);
+      return resultado;
+    } catch (error) {
+      throw error;
+    }
   }
   async get_proyecto(data) {
     try {
@@ -70,12 +73,10 @@ class ProyectoServicio {
       if (proyecto.rows.length > 0) {
         return proyecto;
       } else {
-        console.error("El proyecto no existe");
-        return error;
+        throw new Error("No se hallo ningun proyecto con ese id.");
       }
     } catch (error) {
-      console.error("Algo inesperado paso en la base de datos");
-      return error;
+      throw error;
     }
   }
 
@@ -85,12 +86,10 @@ class ProyectoServicio {
         var proyecto = await this.repository.create_proyecto(data);
         return proyecto;
       } else {
-        console.error("Algo inesperado paso en la base de datos");
-        return null;
+        throw new Error("Algo inesperado paso en la base de datos");
       }
     } catch (error) {
-      console.error(error.message);
-      return error;
+      throw error;
     }
   }
 
@@ -112,20 +111,14 @@ class ProyectoServicio {
     try {
       return await this.repository.participate_proyecto(id, id_autenticacion);
     } catch (error) {
-      console.error(
-        "Algo inesperado paso con la Base de datos o el id del proyecto o participante no existe"
-      );
-      return error;
+      throw new Error("Algo inesperado paso con la Base de datos o el id del proyecto o participante no existe.");
     }
   }
   async participation(id, id_autenticacion) {
     try {
       return await this.repository.participation(id, id_autenticacion);
     } catch (error) {
-      console.error(
-        "Algo inesperado paso con la Base de datos o el id del proyecto o participante no existe"
-      );
-      return error;
+      throw new Error("Algo inesperado paso con la Base de datos o el id del proyecto o participante no existe");
     }
   }
 
@@ -133,8 +126,7 @@ class ProyectoServicio {
     try {
       return await this.repository.delete_proyecto(id);
     } catch (error) {
-      console.error("El Proyecto " + id.toString() + " No existe");
-      return error;
+      throw new Error("El Proyecto " + id.toString() + " No existe.");
     }
   }
   async get_participantes_proyecto_simple(id) {
@@ -144,12 +136,15 @@ class ProyectoServicio {
       );
       return validar;
     } catch (error) {
-      console.error("Algo inesperado paso con la Base de datos");
-      return error;
+      throw error;
     }
   }
   async get_categorias_proyectos(data) {
-    return await this.repository.get_categorias_proyectos(data);
+    try {
+      return await this.repository.get_categorias_proyectos(data);
+    } catch (error) {
+      throw error;
+    }
   }
   async get_categorias() {
     return await this.repository.get_categorias();
@@ -162,10 +157,7 @@ class ProyectoServicio {
         id_autenticacion
       );
     } catch (error) {
-      console.error(
-        "Algo inesperado paso con la Base de datos o el id del proyecto o participante no existe"
-      );
-      return error;
+      throw new Error("Algo inesperado paso con la Base de datos o el id del proyecto o participante no existe");
     }
   }
 
@@ -174,27 +166,31 @@ class ProyectoServicio {
       var resultado = await this.repository.get_my_proyectos(id_autenticacion);
       return resultado;
     } catch (error) {
-      console.error(
-        "Algo inesperado paso con la Base de datos o el id del participante no existe"
-      );
-      return error;
+      throw new Error("Algo inesperado paso con la Base de datos o el id del participante no existe");
     }
   }
 
   async get_lideres() {
-    return await this.repository.get_lideres();
+    try {
+      return await this.repository.get_lideres();
+    } catch (error) {
+      throw error;
+    }
   }
 
   async get_roles() {
-    return await this.repository.get_roles();
+    try {
+      return await this.repository.get_roles();
+    } catch (error) {
+      throw error;
+    }
   }
 
   async get_rol(id_autenticacion) {
     try {
       return await this.repository.get_rol(id_autenticacion);
     } catch (error) {
-      console.error("Algo inesperado paso con la Base de datos");
-      return error;
+      throw new Error(`Algo inesperado paso con la Base de datos ${error.message}`);
     }
   }
 
@@ -202,16 +198,14 @@ class ProyectoServicio {
     try {
       return await this.repository.get_numero_participantes(id_proyecto);
     } catch (error) {
-      console.error("Algo inesperado paso con la Base de datos");
-      return error;
+      throw new Error(`Algo inesperado paso con la Base de datos ${error.message}`);
     }
   }
   async get_eventos_proyecto(id_proyecto) {
     try {
       return await this.repository.get_eventos_proyecto(id_proyecto);
     } catch (error) {
-      console.error("Algo inesperado paso con la Base de datos");
-      return error;
+      throw new Error(`Algo inesperado paso con la Base de datos ${error.message}`);
     }
   }
 
@@ -220,8 +214,7 @@ class ProyectoServicio {
       var resultado = await this.repository.get_proyectos_acabado();
       return resultado;
     } catch (error) {
-      console.error("Algo inesperado paso con la Base de datos");
-      return error;
+      throw new Error(`Algo inesperado paso con la Base de datos ${error.message}`);
     }
   }
 
@@ -230,8 +223,7 @@ class ProyectoServicio {
       let resultado = await this.repository.get_proyectos_pasados_categoria(data);
       return resultado;
     } catch (error) {
-      console.error("Algo inesperado paso con la Base de datos");
-      return error;
+      throw new Error(`Algo inesperado paso con la Base de datos ${error.message}`);
     }
   }
 
@@ -243,15 +235,14 @@ class ProyectoServicio {
         id_usuario
       );
     } catch (error) {
-      console.error("Algo inesperado paso con la base de Datos");
-      return error;
+      throw new Error(`Algo inesperado paso con la Base de datos ${error.message}`);
     }
   }
   async get_usuarios() {
     try {
       return await this.repository.get_usuarios();
     } catch (error) {
-      throw console.error("Algo inesperado paso con la Base de datos");
+      throw new Error(`Algo inesperado paso con la Base de datos ${error.message}`);
     }
   }
 
@@ -265,7 +256,7 @@ class ProyectoServicio {
         id_proyecto
       );
     } catch (error) {
-      throw console.error("Algo inesperado paso con la Base de datos");
+      throw new Error(`Algo inesperado paso con la Base de datos ${error.message}`);
     }
   }
 
@@ -273,7 +264,7 @@ class ProyectoServicio {
     try {
       return await this.repository.get_imagen(id_proyecto);
     } catch (error) {
-      throw console.error("Algo inesperado paso con la Base de datos");
+      throw new Error(`Algo inesperado paso con la Base de datos ${error.message}`);
     }
   }
 
@@ -281,10 +272,7 @@ class ProyectoServicio {
     try {
       return await this.repository.get_lista_eventos_para_proyectos(id_proyecto);
     } catch (error) {
-      console.error(
-        "Algo inesperado paso con la Base de datos o el id proyecto no existe"
-      );
-      return error;
+      throw new Error(`Algo inesperado paso con la Base de datos ${error.message}`);
     }
   }
 
@@ -292,10 +280,7 @@ class ProyectoServicio {
     try {
       return await this.repository.get_lista_por_proyecto(proyecto);
     } catch (error) {
-      console.error(
-        "Algo inesperado paso con la Base de datos o el proyecto no existe"
-      );
-      return error;
+      throw new Error(`Algo inesperado paso con la Base de datos ${error.message}`);
     }
   }
 }

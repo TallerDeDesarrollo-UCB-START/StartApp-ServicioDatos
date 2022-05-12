@@ -27,7 +27,6 @@ class DbProyectoRepositorio {
     return proyecto;
   }
   async create_proyecto(data) {
-    debugger;
     const {
       titulo,
       descripcion,
@@ -371,7 +370,7 @@ class DbProyectoRepositorio {
 
   async get_rol(id_autenticacion) {
     const rol = await pool.query(
-      "SELECT rol FROM public.usuarios WHERE id_usuario = $1",
+      "SELECT rol FROM public.usuarios WHERE id_usuario=$1",
       [id_autenticacion]
     );
     return rol;
@@ -397,7 +396,6 @@ class DbProyectoRepositorio {
 
   async get_proyectos_acabado() {
     const proyectos_acabados = await pool.query(
-      //************* */     'ACABADO' = false
       "SELECT p.*, cat.tipo as categoria FROM public.proyectos p,public.categoria_proyectos as cat WHERE estado=false and p.categoria_id=cat.id"
     );
     return proyectos_acabados;
@@ -405,7 +403,6 @@ class DbProyectoRepositorio {
 
   async get_proyectos_pasados_categoria(categoria) {
     const proyectos_acabados = await pool.query(
-      //************* */     'ACABADO' = false
       "SELECT proyectos.*,categoria_proyectos.tipo as categoria FROM public.proyectos INNER JOIN public.categoria_proyectos ON proyectos.categoria_id = categoria_proyectos.id WHERE categoria_proyectos.tipo = $1 and estado=false",
       [categoria]
     );
@@ -416,7 +413,6 @@ class DbProyectoRepositorio {
     const proyecto_existence = Boolean(
       (
         await pool.query(
-          //************* */     'ACABADO' = false
           "SELECT EXISTS (SELECT * from proyectos where id=$1 and estado=false)",
           [id_proyecto]
         )
