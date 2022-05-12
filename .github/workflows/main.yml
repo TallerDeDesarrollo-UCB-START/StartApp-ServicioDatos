@@ -33,3 +33,24 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY_DEPLOY}}
           heroku_app_name: "dev-back-startamericas" #Must be unique in Heroku
           heroku_email: "ucb.start.project@gmail.com"
+
+  sonarcloud:
+    name: Build (Sonar Cloud)
+    needs: [deploy_to_heroku]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+
+    - name: Node install dependencies
+      run: npm install
+    
+    - name: SonarCloud Scan
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
