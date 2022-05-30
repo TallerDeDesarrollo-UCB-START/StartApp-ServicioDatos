@@ -72,7 +72,8 @@ class EventoServicio {
       if (this.validar(data)) {
         return await this.repository.create_evento(data);
       } else {
-        throw new Error("El formulario esta incompleto");
+        //before throw new Error("El formulario esta incompleto") 
+        return new Error("El formulario esta incompleto");
       }
     } catch (error) {
       throw error;
@@ -84,7 +85,7 @@ class EventoServicio {
       if (this.validar(data)) {
         return await this.repository.delete_evento(data);
       } else {
-        throw new Error("Algo inesperado paso con el repositorio");
+        return new Error("Algo inesperado paso con el repositorio");
       }
     } catch (error) {
       throw error;
@@ -96,7 +97,7 @@ class EventoServicio {
       if (this.validar(data)) {
         return await this.repository.update_evento_estado1(data);
       } else {
-        throw new Error("Algo inesperado paso con el repositorio");
+        return new Error("Algo inesperado paso con el repositorio");
       }
     } catch (error) {
       throw error;
@@ -108,7 +109,7 @@ class EventoServicio {
       if (this.validar(data)) {
         return await this.repository.update_evento_estado2(data);
       } else {
-        throw new Error("Algo inesperado paso con el repositorio");
+        return new Error("Algo inesperado paso con el repositorio");
       }
     } catch (error) {
       throw error;
