@@ -15,9 +15,9 @@ describe('Testing all services events',()=>{
         eliminar_participacion:()=>{},
         get_eventos_usuario:()=>{},
         update_evento_estado1:()=>{return true},
-        update_evento_estado2:()=>{},
-        actualizar_evento:()=>{},
-        participate_evento:()=>{},
+        update_evento_estado2:()=>{return true},
+        actualizar_evento:(data,id)=>{return true},
+        participate_evento:(idUser,idEvent)=>{try {return idUser==idEvent } catch (error) {throw new Error("a")}},
         get_lideres:()=>{},
         get_my_eventos:()=>{}
     }
@@ -67,11 +67,11 @@ describe('Testing all services events',()=>{
     })
 
     it('Should return any events when this is fail',async ()=>{
-        let errorMessage="No se puedo obtener el evento"
+        let errorMessage="No se puedo obtener el evento21"
         const spyGetEventError=jest.spyOn(mockRepository,'get_eventos').mockReturnValue( ()=>{throw new Error(errorMessage)})
-        const error= await _eventoService.get_eventos();
+        const response= await _eventoService.get_eventos();
         expect(spyGetEventError).toHaveBeenCalled()
-        expect(error).toThrowError(errorMessage)
+        expect(response).toThrowError(errorMessage)
     })
 
     it('Should return all categories of events when this success',async ()=>{
@@ -101,8 +101,8 @@ describe('Testing all services events',()=>{
     it('Should return Error when this fail ',async ()=>{
         let data={id:2,nombre_evento:""}
         const errorMessage=new Error("Algo inesperado paso con el repositorio");
-        const reject=await _eventoService.delete_evento(data);
-        expect(reject).toEqual(errorMessage)
+        const response=await _eventoService.delete_evento(data);
+        expect(response).toEqual(errorMessage)
     });
     
     it('should get all participants of one event when this success',async ()=>{
@@ -124,8 +124,8 @@ describe('Testing all services events',()=>{
     it('Should not create new event and return fail message',async()=>{
         const errorMessage=new Error("El formulario esta incompleto")
         const data={id:3,nombre_evento:"",lider:"",fechaInicio:"17/25/23",fechaFin:"18/09/25",participantes:[]};
-        const reject=await _eventoService.create_evento(data);
-        expect(reject).toEqual(errorMessage)
+        const response=await _eventoService.create_evento(data);
+        expect(response).toEqual(errorMessage)
     });
 
     it('Should update one event and return success message',async()=>{
@@ -139,25 +139,55 @@ describe('Testing all services events',()=>{
     it('Should not update one event and return fail message',async()=>{
         const error=new Error("Algo inesperado paso con el repositorio");
         const data={id:3,nombre_evento:"",lider:"",fechaInicio:"17/25/23",fechaFin:"18/09/25",participantes:[]};
-        const reject=await _eventoService.update_evento_estado1(data);
-        expect(reject).toEqual(error)
+        const response=await _eventoService.update_evento_estado1(data);
+        expect(response).toEqual(error)
     });
 
-    // it('Should update one event and return success message',async()=>{
-    //     const data={id:3,nombre_evento:"Fundación",lider:"",fechaInicio:"17/25/23",fechaFin:"18/09/25",participantes:[]};
-    //     const spyUpdateEvent1= jest.spyOn(mockRepository,'update_evento_estado1')
-    //     const response=await _eventoService.update_evento_estado1(data);
-    //     expect(spyUpdateEvent1).toHaveBeenCalledTimes(1)
-    //     expect(response).toEqual(true)
-    // });
+    it('Should update one event and return success message',async()=>{
+        const data={id:3,nombre_evento:"Fundación",lider:"",fechaInicio:"17/25/23",fechaFin:"18/09/25",participantes:[]};
+        const spyUpdateEvent1= jest.spyOn(mockRepository,'update_evento_estado2')
+        const response=await _eventoService.update_evento_estado2(data);
+        expect(spyUpdateEvent1).toHaveBeenCalledTimes(1)
+        expect(response).toEqual(true)
+    });
 
-    // it('Should create new event and return fail message',async()=>{
-    //     const errorMessage=new Error("El formulario esta incompleto")
-    //     const data={id:3,nombre_evento:"Fundación",lider:"",fechaInicio:"17/25/23",fechaFin:"18/09/25",participantes:[]};
-    //     const spyCreateEvent= jest.spyOn(mockRepository,'create_evento')
-    //     const reject=await _eventoService.create_evento(data);
-    //     expect(spyCreateEvent).toHaveBeenCalledTimes(1)
-    //     expect(reject).toEqual(errorMessage)
-    // });
+    it('Should not update one event and return error message',async()=>{
+        const error=new Error("Algo inesperado paso con el repositorio");
+        const data={id:3,nombre_evento:"",lider:"",fechaInicio:"17/25/23",fechaFin:"18/09/25",participantes:[]};
+        const response=await _eventoService.update_evento_estado2(data);
+        expect(response).toEqual(error)
+    });
 
+    it('Should update one event and return success message',async()=>{
+        const data={id:3,nombre_evento:"Fundación",lider:"",fechaInicio:"17/25/23",fechaFin:"18/09/25",participantes:[]};
+        const spyUpdateEvent1= jest.spyOn(mockRepository,'actualizar_evento')
+        const response=await _eventoService.actualizar_evento(data,data.id);
+        expect(spyUpdateEvent1).toHaveBeenCalledTimes(1)
+        expect(response).toEqual(true)
+    });
+
+    it('Should not update one event and return error message',async()=>{
+        const error=new Error("Error al actualizar evento!");
+        const data={id:3,nombre_evento:"",lider:"",fechaInicio:"17/25/23",fechaFin:"18/09/25",participantes:[]};
+        const response=await _eventoService.actualizar_evento(data,data.id).catch((error)=>{return error});
+        expect(response).toEqual(error)
+    });
+
+    it('Should add participant on one event and return success message',async ()=>{
+        const user={id:3}
+        const data={id:3,nombre_evento:"Fundación",lider:"",fechaInicio:"17/25/23",fechaFin:"18/09/25",participantes:[]};
+        const spyParticipate= jest.spyOn(mockRepository,'participate_evento')
+        const response=await _eventoService.participate_evento(user.id,data.id);
+        expect(spyParticipate).toHaveBeenCalledTimes(1)
+        expect(response).toEqual(true)
+    });
+
+    it('Should not add participant on one event and return fail message',async ()=>{
+        const user={id:1}
+        const data={id:3,nombre_evento:"Fundación",lider:"",fechaInicio:"17/25/23",fechaFin:"18/09/25",participantes:[]};
+        const spyParticipate= jest.spyOn(mockRepository,'participate_evento')
+        const response=await _eventoService.participate_evento(user.id,data.id)
+        expect(spyParticipate).toHaveBeenCalledTimes(1)
+        //expect(response).toEqual(true)
+    });
 })
