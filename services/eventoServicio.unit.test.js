@@ -17,9 +17,9 @@ describe('Testing all services events',()=>{
         update_evento_estado1:()=>{return true},
         update_evento_estado2:()=>{return true},
         actualizar_evento:(data,id)=>{return true},
-        participate_evento:(idUser,idEvent)=>{try {return idUser==idEvent } catch (error) {throw new Error("a")}},
-        get_lideres:()=>{},
-        get_my_eventos:()=>{}
+        participate_evento:(idUser,idEvent)=>{ return idUser==idEvent},
+        get_lideres:(data)=>{return data.lider},
+        get_my_eventos:(data)=>{return {rows:data.eventos}}
     }
     beforeAll(()=>{
         _eventoService=new EventoServicio(mockRepository);
@@ -185,9 +185,45 @@ describe('Testing all services events',()=>{
     it('Should not add participant on one event and return fail message',async ()=>{
         const user={id:1}
         const data={id:3,nombre_evento:"Fundación",lider:"",fechaInicio:"17/25/23",fechaFin:"18/09/25",participantes:[]};
-        const spyParticipate= jest.spyOn(mockRepository,'participate_evento')
-        const response=await _eventoService.participate_evento(user.id,data.id)
+        const errorMessage="El 1 del evento no existe."
+        const spyParticipate= jest.spyOn(mockRepository,'participate_evento').mockImplementation(()=>Promise.reject(new Error()))
+        const response=await _eventoService.participate_evento(user.id,data.id).catch((error)=>{return error})
         expect(spyParticipate).toHaveBeenCalledTimes(1)
-        //expect(response).toEqual(true)
+        expect(response.message).toEqual(errorMessage)
+    });
+
+    it('Should return all leaders on one event and return success message',async ()=>{ 
+        const user={id:3,name:"Connor"}
+        const data={id:3,nombre_evento:"Fundación",lider:user.name,fechaInicio:"17/25/23",fechaFin:"18/09/25",participantes:[]};
+        const spyLeaders= jest.spyOn(mockRepository,'get_lideres')
+        const response=await _eventoService.get_lideres(data)
+        expect(spyLeaders).toHaveBeenCalledTimes(1)
+        expect(response).toEqual(data.lider)
+    });
+
+    it('Should not return all leaders on one event and return fail message',async ()=>{
+        const data={id:3,nombre_evento:"Fundación",lider:"",fechaInicio:"17/25/23",fechaFin:"18/09/25",participantes:[]};
+        const errorMessage="No existe ningun lider"
+        const spyLeaders= jest.spyOn(mockRepository,'get_lideres').mockImplementation(()=>Promise.reject(new Error(errorMessage)))
+        const response=await _eventoService.get_lideres(data).catch((error)=>{return error})
+        expect(spyLeaders).toHaveBeenCalledTimes(1)
+        expect(response.message).toEqual(errorMessage)
+    });
+
+    it('Should return all events on one participant and return success message',async ()=>{ 
+        const data={id:3,name:"Connor",eventos:[{id:1, evento:"a",fecha_evento:"13/12/22",hora_inicio:"17:15"},{id:2,evento:"b",fecha_evento:"17/12/22",hora_inicio:"07:15"},{id:3,evento:"c",fecha_evento:"07/12/22",hora_inicio:"00:15"}]}
+        const spyMyEventos= jest.spyOn(mockRepository,'get_my_eventos')
+        const response=await _eventoService.get_my_eventos(data)
+        expect(spyMyEventos).toHaveBeenCalledTimes(1)
+        expect(response).toEqual(data.eventos)
+    });
+
+    it('Should not return events on one participant and return fail message',async ()=>{
+        const data=""
+        const errorMessage="Algo inesperado paso con la Base de datos o el id del participante no existe"
+        const spyLeaders= jest.spyOn(mockRepository,'get_my_eventos').mockImplementation(()=>Promise.reject(new Error()))
+        const response=await _eventoService.get_my_eventos(data).catch((error)=>{return error})
+        expect(spyLeaders).toHaveBeenCalledTimes(1)
+        expect(response.message).toEqual(errorMessage)
     });
 })
