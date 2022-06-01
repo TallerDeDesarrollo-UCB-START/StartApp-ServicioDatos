@@ -13,8 +13,16 @@
     "type": "git",
     "url": "git+https://github.com/TallerDeDesarrollo-UCB-START/StartApp-ServicioDatos.git"
   },
-  "jest":{
-    "collectCoverage":true
+  "jest": {
+    "collectCoverage": true,
+    "reporters": [
+      "default",
+      ["jest-html-reporters", {
+        "publicPath": "./html-report",
+        "filename": "report.html",
+        "openReport": true
+      }]
+      ]
   },
   "author": "",
   "license": "ISC",
@@ -32,6 +40,7 @@
     "pg": "^8.7.1"
   },
   "devDependencies": {
-    "jest": "^28.1.0"
+    "jest": "^28.1.0",
+    "jest-html-reporters": "^3.0.8"
   }
 }
