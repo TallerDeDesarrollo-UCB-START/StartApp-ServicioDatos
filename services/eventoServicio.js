@@ -1,8 +1,6 @@
-const _repository = require("../data/dbEventoRepositorio.js");
-
 class EventoServicio {
-  constructor() {
-    this.repository = new _repository();
+  constructor(_repository) {
+    this.repository = _repository;
   }
   validar(data) {
     let nombre_evento = data["nombre_evento"];
@@ -60,9 +58,9 @@ class EventoServicio {
   async get_evento(data) {
     try {
       var req = await this.repository.get_evento(data);
-      console.error(req.rows)
-      if ( req.rows.length == 0)
-       throw Error("El evento no existe.");
+      //console.error(req.rows)
+      // if ( req.rows.length == 0)
+      //  throw Error("El evento no existe.");
       return req;
     } catch (error) {
       throw error;
@@ -74,7 +72,8 @@ class EventoServicio {
       if (this.validar(data)) {
         return await this.repository.create_evento(data);
       } else {
-        throw new Error("El formulario esta incompleto");
+        //before throw new Error("El formulario esta incompleto") 
+        return new Error("El formulario esta incompleto");
       }
     } catch (error) {
       throw error;
@@ -86,7 +85,7 @@ class EventoServicio {
       if (this.validar(data)) {
         return await this.repository.delete_evento(data);
       } else {
-        throw new Error("Algo inesperado paso con el repositorio");
+        return new Error("Algo inesperado paso con el repositorio");
       }
     } catch (error) {
       throw error;
@@ -98,7 +97,7 @@ class EventoServicio {
       if (this.validar(data)) {
         return await this.repository.update_evento_estado1(data);
       } else {
-        throw new Error("Algo inesperado paso con el repositorio");
+        return new Error("Algo inesperado paso con el repositorio");
       }
     } catch (error) {
       throw error;
@@ -110,7 +109,7 @@ class EventoServicio {
       if (this.validar(data)) {
         return await this.repository.update_evento_estado2(data);
       } else {
-        throw new Error("Algo inesperado paso con el repositorio");
+        return new Error("Algo inesperado paso con el repositorio");
       }
     } catch (error) {
       throw error;
