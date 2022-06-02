@@ -1,8 +1,6 @@
-const _repository = require("../data/dbProyectoRepositorio.js");
-
 class ProyectoServicio {
-  constructor() {
-    this.repository = new _repository();
+  constructor(_repository) {
+    this.repository = _repository;
   }
   validar(data) {
     let nombre_proyecto = data["titulo"];

@@ -1,5 +1,6 @@
 const _service_evento = require("../services/eventoServicio");
-const service_evento = new _service_evento();
+const _repository = require("../data/dbEventoRepositorio.js");
+const service_evento = new _service_evento(_repository);
 
 module.exports = function (app) {
   app.post("/eventos/crearevento", async (req, res) => {
