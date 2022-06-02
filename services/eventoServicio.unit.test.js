@@ -7,13 +7,14 @@ describe('Testing all services events',()=>{
         eventos:[],
         categorias:[],
         create_evento:(data)=>{ mockRepository.eventos.push(data);return true},
-        get_eventos:()=>{return mockRepository.eventos},
-        get_categorias:()=>{return mockRepository.categorias },
+        get_eventos_usuario:(data)=>{},
+        get_eventos:(data)=>{data;return mockRepository.eventos},
+        get_categorias:(data)=>{data;return mockRepository.categorias },
         get_participantes_eventos:(idEvento)=>{return (mockRepository.eventos.filter((evento)=>{ return evento.id==idEvento}))[0].participantes},
         get_evento:(idEvento)=>{return mockRepository.eventos.filter((evento)=>{ return evento.id==idEvento??evento  })},
         delete_evento:(dataEvento)=>{return mockRepository.eventos.filter((evento)=>{return evento.id!=dataEvento.id??evento })},
-        eliminar_participacion:()=>{},
-        get_eventos_usuario:()=>{},
+        eliminar_participacion:(idEvento, idUsuario)=>{return true},
+        get_eventos_usuario:(data)=>{return true},
         update_evento_estado1:()=>{return true},
         update_evento_estado2:()=>{return true},
         actualizar_evento:(data,id)=>{return true},
@@ -52,32 +53,45 @@ describe('Testing all services events',()=>{
     
     it('should return true when validar function is called with non-empty nombre_evento',() => {
         const data = {
-            nombre_evento: "Visita a Champarrancho"
+            nombre_evento: ""
         };
-        const isValid = _eventoService.validar(data);
-        expect(isValid).toBe(true);
+        try{
+            _eventoService.validar(data)
+        }
+        catch(error){
+            expect(error).toBe("Por favor ingrese un nombre del evento")
+        }
     })
 
     it('Should return all events when this is success',async ()=>{
         const countEventos=2;
         const spyGetEvent=jest.spyOn(mockRepository,'get_eventos')
-        const response=await _eventoService.get_eventos()
+        const response=await _eventoService.get_eventos("")
         expect(spyGetEvent).toHaveBeenCalled()
         expect(response).toHaveLength(countEventos)
     })
 
+    it('Should return all events when this is success',async ()=>{
+        data={}
+        const spyGetEvent=jest.spyOn(mockRepository,'get_eventos_usuario')
+        const response=await _eventoService.get_eventos_usuario(data)
+        expect(spyGetEvent).toHaveBeenCalled()
+        expect(response).toEqual(true)
+    })
+    
     it('Should return any events when this is fail',async ()=>{
         let errorMessage="No se puedo obtener el evento21"
         const spyGetEventError=jest.spyOn(mockRepository,'get_eventos').mockReturnValue( ()=>{throw new Error(errorMessage)})
-        const response= await _eventoService.get_eventos();
+        const response= await _eventoService.get_eventos("");
         expect(spyGetEventError).toHaveBeenCalled()
         expect(response).toThrowError(errorMessage)
     })
 
     it('Should return all categories of events when this success',async ()=>{
+        data={}
         const count_categories=4;
         const spyGetCategorias=jest.spyOn(mockRepository,'get_categorias')
-        const response=await _eventoService.get_categorias();
+        const response=await _eventoService.get_categorias(data);
         expect(spyGetCategorias).toHaveBeenCalled()
         expect(response).toHaveLength(count_categories)
     });
@@ -140,6 +154,21 @@ describe('Testing all services events',()=>{
         const error=new Error("Algo inesperado paso con el repositorio");
         const data={id:3,nombre_evento:"",lider:"",fechaInicio:"17/25/23",fechaFin:"18/09/25",participantes:[]};
         const response=await _eventoService.update_evento_estado1(data);
+        expect(response).toEqual(error)
+    });
+
+    it('Should delete one participant and return success message',async()=>{
+        const data={id:3,nombre_evento:"Fundación",lider:"",fechaInicio:"17/25/23",fechaFin:"18/09/25",participantes:[]};
+        const spyDeleteParticipant= jest.spyOn(mockRepository,'eliminar_participacion')
+        const response=await _eventoService.eliminar_participacion(data.id,data.id);
+        expect(spyDeleteParticipant).toHaveBeenCalledTimes(1)
+        expect(response).toEqual(true)
+    });
+
+    it.skip('Should not delete one participant and return fail message',async()=>{
+        const error=new Error("Algo inesperado paso con el repositorio");
+        const data={id:3,nombre_evento:"",lider:"",fechaInicio:"17/25/23",fechaFin:"18/09/25",participantes:[]};
+        const response=await _eventoService.eliminar_participacion(data.id,data.id);
         expect(response).toEqual(error)
     });
 
