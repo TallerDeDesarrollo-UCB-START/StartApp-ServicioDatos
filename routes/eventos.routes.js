@@ -153,11 +153,11 @@ module.exports = function (app) {
       const mis_eventos = await service_evento.get_my_eventos(id_autenticacion);
       if (!mis_eventos)
         res
-          .status(404)
+          .status(204)
           .send(
-            "El id : " +
+            "El usuario con id : " +
               parseInt(id_autenticacion).toString() +
-              " no existe entre los voluntarios"
+              " no tiene participaciones en los eventos."
           );
       else {
         res.status(200).json(mis_eventos);

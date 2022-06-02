@@ -244,7 +244,7 @@ module.exports = function (app) {
       const {id_autenticacion}=req.params;
       const mis_proyectos=await service.get_my_proyectos(id_autenticacion);
       if(mis_proyectos==false)
-        res.status(404).send(`El id : ${parseInt(id_autenticacion).toString()} no existe entre los voluntarios`);
+        res.status(204).send(`El usuario con id : ${parseInt(id_autenticacion).toString()} no tiene proyectos participando.`);
       else
       {
         res.status(200).json(mis_proyectos.rows);

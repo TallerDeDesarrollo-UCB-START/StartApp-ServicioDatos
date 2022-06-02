@@ -122,7 +122,7 @@ class DbUsuarioRepositorio {
   }
 
   async UpdateInsignias(id_user, insignias_nuevas) {
-    const insignias_lista = insignias_nuevas.split(",");
+    let insignias_lista = insignias_nuevas.split(",");
     await pool.query(
       "DELETE FROM insignias_de_usuarios WHERE id_usuario = $1",
       [id_user]
