@@ -50,7 +50,8 @@ jobs:
 
     - name: Node install dependencies
       run: npm install
-    
+    - name: Node install dependencies
+      run: npm test
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
       env:
