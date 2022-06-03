@@ -1,6 +1,6 @@
-const _service = require("../services/proyectoServicio");
-const _repository = require("../data/dbProyectoRepositorio.js");
-const service = new _service(_repository);
+const Service = require("../services/proyectoServicio");
+const Repository = require("../data/dbProyectoRepositorio.js");
+const service = new Service(new Repository());
 const multer =require('multer')
 const path = require('path')
 const imageUpload = multer({

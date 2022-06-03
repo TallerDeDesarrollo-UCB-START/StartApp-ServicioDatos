@@ -1,6 +1,6 @@
 class ProyectoServicio {
-  constructor(_repository) {
-    this.repository = _repository;
+  constructor(repository) {
+    this.repository = repository;
   }
   validar(data) {
     let nombre_proyecto = data["titulo"];
@@ -164,6 +164,7 @@ class ProyectoServicio {
       var resultado = await this.repository.get_my_proyectos(id_autenticacion);
       return resultado;
     } catch (error) {
+      console.error(error)
       throw new Error("Algo inesperado paso con la Base de datos o el id del participante no existe");
     }
   }

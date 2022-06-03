@@ -34,6 +34,7 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY_DEPLOY}}
           heroku_app_name: "dev-back-startamericas" #Must be unique in Heroku
           heroku_email: "ucb.start.project@gmail.com"
+      - run: npm test
 
   sonarcloud:
     name: Build (Sonar Cloud)

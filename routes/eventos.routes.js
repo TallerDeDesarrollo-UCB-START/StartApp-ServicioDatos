@@ -1,6 +1,6 @@
-const _service_evento = require("../services/eventoServicio");
-const _repository = require("../data/dbEventoRepositorio.js");
-const service_evento = new _service_evento(_repository);
+const ServiceEvento = require("../services/eventoServicio");
+const Repository = require("../data/dbEventoRepositorio.js");
+const service_evento = new ServiceEvento(new Repository());
 
 module.exports = function (app) {
   app.post("/eventos/crearevento", async (req, res) => {
@@ -164,7 +164,7 @@ module.exports = function (app) {
         res.status(200).json(mis_eventos);
       }
     } catch (error) {
-      res.status(404).send(`{"message":"No se pudo obtener los eventos de usuario con el id ${req.params["id_autenticacion"]}, ${error.message}", "data":false}`);
+      res.status(404).send(`{"message":"No se pudo obtener los eventos de usuario con el id ${req.params["id_autenticacion"]}", "data":false}`);
     }
   });
 
