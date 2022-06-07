@@ -135,7 +135,7 @@ describe('Testing all services events',()=>{
     });
 
     it.skip('Should not create new event and return fail message',async()=>{
-        const errorMessage=new Error("El formulario esta incompleto")
+        const errorMessage=new Error("Algo inesperado paso con el repositorio")
         const data={id:3,nombre_evento:"",lider:"",fechaInicio:"17/25/23",fechaFin:"18/09/25",participantes:[]};
         const response=await eventService.create_evento(data);
         expect(response).toEqual(errorMessage)
