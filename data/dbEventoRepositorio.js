@@ -9,22 +9,22 @@ class DbEventoRepositorio {
     this.cursor = null;
   }
 
-  async get_eventos(data) {
+  async getEvents(data) {
     const eventos = await pool.query("SELECT * FROM public.eventos");
     return eventos;
   }
-  async get_categorias(data) {
+  async getCategories(data) {
     const categorias = await pool.query("SELECT * FROM public.intereses");
     return categorias;
   }
-  async get_participantes_eventos(id_evento) {
+  async getParticipantsEvents(id_evento) {
     const participantes_eventos = await pool.query(
       "SELECT us.id_usuario, us.nombre, us.apellido, us.rol, event.nombre_evento, us.telefono, event.hora_inicio, event.hora_fin FROM public.participantes_eventos as eve, public.usuarios as us, public.eventos as event WHERE eve.id_usuario=us.id_usuario AND eve.id_evento=$1 AND event.id=eve.id_evento;",
       [id_evento]
     );
     return participantes_eventos;
   }
-  async create_evento(data) {
+  async createEvent(data) {
     const {
       nombre_evento,
       descripcion_evento,
@@ -57,7 +57,7 @@ class DbEventoRepositorio {
     return new_evento;
   }
 
-  async get_evento(data) {
+  async getEvent(data) {
     const { id } = data.params;
     const evento = await pool.query(
       "SELECT * FROM public.eventos WHERE id=$1",
@@ -66,7 +66,7 @@ class DbEventoRepositorio {
     return evento;
   }
 
-  async delete_evento(id) {
+  async deleteEvent(id) {
     const eliminar_evento = await pool.query(
       "DELETE FROM public.eventos WHERE id = $1",
       [id]
@@ -74,7 +74,7 @@ class DbEventoRepositorio {
     return eliminar_evento;
   }
   //Archivar evento
-  async update_evento_estado1(data) {
+  async updateStateEvent1(data) {
     const actualizar_estado = await pool.query(
       "UPDATE public.eventos SET estado = 0  WHERE id = $1",
       [data]
@@ -82,7 +82,7 @@ class DbEventoRepositorio {
     return actualizar_estado;
   }
   //Mostrar Evento
-  async update_evento_estado2(data) {
+  async updateStateEvent2(data) {
     const actualizar_estado = await pool.query(
       "UPDATE public.eventos SET estado = 1  WHERE id = $1",
       [data]
@@ -90,7 +90,7 @@ class DbEventoRepositorio {
     return actualizar_estado;
   }
 
-  async participate_evento(id, id_autenticacion) {
+  async participateEvent(id, id_autenticacion) {
     const participate_evento = await pool.query(
       "INSERT INTO participantes_eventos(id_usuario, id_evento)VALUES($1,$2)",
       [id_autenticacion, id]
@@ -100,7 +100,7 @@ class DbEventoRepositorio {
 
   //Obtener Id de eventos donde participa un usuario
 
-  async get_eventos_usuario(id_usuario) {
+  async getEventsUser(id_usuario) {
     const eventos_usuario = await pool.query(
       "SELECT id_evento FROM participantes_eventos WHERE participantes_eventos.id_usuario = $1;",
       [id_usuario]
@@ -109,7 +109,7 @@ class DbEventoRepositorio {
   }
 
   //Eliminar participacion de un evento
-  async eliminar_participacion(idEvento, idUsuario) {
+  async deleteParticipation(idEvento, idUsuario) {
     const eliminar_participacion = await pool.query(
       "DELETE FROM participantes_eventos WHERE id_evento = $1 AND id_usuario = $2",
       [idEvento, idUsuario]
@@ -117,14 +117,14 @@ class DbEventoRepositorio {
     return eliminar_participacion;
   }
 
-  async get_lideres(data) {
+  async getLeaders(data) {
     const lideres = await pool.query(
       "SELECT usuarios.rol AS rol, usuarios.nombre AS Nombre,usuarios.apellido AS Apellido FROM usuarios  WHERE usuarios.rol = 'lider'"
     );
     return lideres;
   }
 
-  async get_my_eventos(id_autenticacion) {
+  async getMyEvents(id_autenticacion) {
     const existe_usuario = Boolean(
       (
         await pool.query(
@@ -143,7 +143,7 @@ class DbEventoRepositorio {
     return existe_usuario;
   }
 
-  async actualizar_evento(id, data) {
+  async updateEvent(id, data) {
     const {
       nombre_evento,
       descripcion_evento,
