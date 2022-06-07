@@ -9,6 +9,7 @@ class ProyectoServicio {
         throw new Error("Por favor ingrese el nombre del proyecto.");
       }
     } catch (error) {
+      console.error(error);
       throw error;
     }
     return true;
@@ -62,6 +63,7 @@ class ProyectoServicio {
       var resultado = await this.repository.get_proyectos(data);
       return resultado;
     } catch (error) {
+      console.error(error);
       throw error;
     }
   }
@@ -74,6 +76,7 @@ class ProyectoServicio {
         throw new Error("No se hallo ningun proyecto con ese id.");
       }
     } catch (error) {
+      console.error(error);
       throw error;
     }
   }
@@ -87,6 +90,7 @@ class ProyectoServicio {
         throw new Error("Algo inesperado paso en la base de datos");
       }
     } catch (error) {
+      console.error(error);
       throw error;
     }
   }
@@ -101,6 +105,7 @@ class ProyectoServicio {
         return null;
       }
     } catch (error) {
+      console.error(error);
       return error;
     }
   }
@@ -134,6 +139,7 @@ class ProyectoServicio {
       );
       return validar;
     } catch (error) {
+      console.error(error);
       throw error;
     }
   }
@@ -141,6 +147,7 @@ class ProyectoServicio {
     try {
       return await this.repository.get_categorias_proyectos(data);
     } catch (error) {
+      console.error(error);
       throw error;
     }
   }
@@ -155,6 +162,7 @@ class ProyectoServicio {
         id_autenticacion
       );
     } catch (error) {
+      console.error(error);
       throw new Error("Algo inesperado paso con la Base de datos o el id del proyecto o participante no existe");
     }
   }
@@ -173,6 +181,7 @@ class ProyectoServicio {
     try {
       return await this.repository.get_lideres();
     } catch (error) {
+      console.error(error);
       throw error;
     }
   }
@@ -181,6 +190,7 @@ class ProyectoServicio {
     try {
       return await this.repository.get_roles();
     } catch (error) {
+      console.error(error);
       throw error;
     }
   }
@@ -278,6 +288,14 @@ class ProyectoServicio {
   async get_lista_por_proyecto(proyecto) {
     try {
       return await this.repository.get_lista_por_proyecto(proyecto);
+    } catch (error) {
+      throw new Error(`Algo inesperado paso con la Base de datos ${error.message}`);
+    }
+  }
+  async uploadFile(path, filename)
+  {
+    try {
+      return await this.repository.uploadFile(path,filename)
     } catch (error) {
       throw new Error(`Algo inesperado paso con la Base de datos ${error.message}`);
     }
