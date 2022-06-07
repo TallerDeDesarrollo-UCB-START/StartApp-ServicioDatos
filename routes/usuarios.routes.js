@@ -26,9 +26,7 @@ module.exports = function (app) {
       res
         .status(202)
         .send(`{"message":"Actualizacion exitosa!", "data": ${data_to_send}}`);
-      // res.status(202).send(`{"message":"Succesfully Updated!", "data":true}`);
     } catch (error) {
-      //console.error(error.message);
       res
         .status(400)
         .send(`{"message":"Los cambios no fueron exitosos.", "data":false}`);

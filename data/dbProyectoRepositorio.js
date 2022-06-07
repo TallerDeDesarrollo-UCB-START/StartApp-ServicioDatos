@@ -1,4 +1,12 @@
 const { pool } = require("../config/pool.config");
+const serviceAccount = require('../ucb-start-test-firebase-adminsdk-o9nau-6390c68f5b.json');
+const firebaseAdmin = require('firebase-admin');
+const { v4: uuidv4 } = require('uuid');
+
+const admin = firebaseAdmin.initializeApp({
+    credential: firebaseAdmin.credential.cert(serviceAccount),
+});
+const storageRef = admin.storage().bucket(`gs://ucb-start-test.appspot.com`);
 class DbProyectoRepositorio {
   constructor() {
     this.cursor = null;
@@ -512,6 +520,16 @@ class DbProyectoRepositorio {
     );
     return eventos;
   }
+  async uploadFile(path, filename) {
+    const storage = await storageRef.upload(path, {
+        public: true,
+        destination: `/uploads/hashnode/${filename}`,
+        metadata: {
+            firebaseStorageDownloadTokens: uuidv4(),
+        }
+    });
+    return storage[0].metadata.mediaLink;
+    }
 
 }
 

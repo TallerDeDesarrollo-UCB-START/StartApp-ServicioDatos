@@ -1,8 +1,13 @@
 const Service = require("../services/proyectoServicio");
 const Repository = require("../data/dbProyectoRepositorio.js");
 const service = new Service(new Repository());
-const multer =require('multer')
-const path = require('path')
+const multer =require('multer');
+const path = require('path');
+const express = require('express');
+const upload = multer({dest: __dirname + '/uploads/images'});
+const fs = require('fs')
+const { v4: uuidv4 } = require('uuid');
+
 const imageUpload = multer({
   storage: multer.diskStorage(
       {
@@ -76,6 +81,7 @@ module.exports = function (app) {
       }
       catch(error)
       {
+        console.error(error);
         throw error;
       }
       
@@ -196,7 +202,7 @@ module.exports = function (app) {
       }
       catch(error)
       {
-        res.status(204).json([]);
+        res.status(204).json(sanitizeHtml([]));
       }
     } catch (error) {
       res.status(404).send(`No se pudo obtener las lista en el proyecto con la categoria ${req.params["categoria"]}, ${error.message}`);
@@ -282,7 +288,7 @@ module.exports = function (app) {
       const rol = await service.get_rol(id_autenticacion);
       res.status(200).json(rol.rows);
     } catch (err) {
-      res.status(404);
+      res.status(404).send("no se pudo auntenticar");
     }
   })
   //Obtener el numero de participantes de un proyecto
@@ -429,6 +435,29 @@ module.exports = function (app) {
       res.status(200).json(lista_eventos.rows);
     }catch(error){
       res.status(404).send(`No se pudo obtener los eventos del proyecto ${req.params["proyecto"]}, ${error.message}`);
+    }
+  });
+  app.post('/uploadPhotos', upload.array('photos'), async (req, res) => {
+    try{
+      if(req.files) {
+          var urls = []
+          req.files.forEach( async (file) => {
+              const url = await service.uploadFile(file.path, uuidv4() + '-' + file.originalname)
+              urls.push(url)
+              fs.unlink(file.path, (err) => {
+                  if (err) throw err
+              })
+              if (urls.length == req.files.length) {
+                  res.json({ links: urls });
+              }
+          })
+      }
+      else 
+      {
+          throw new Error('No se pudo capturar la imagen.');
+      };
+    }catch(error){
+      res.status(404).send(`No se pudo guardar la imagen, ${error.message}`);
     }
   });
 
