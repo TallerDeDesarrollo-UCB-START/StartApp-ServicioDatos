@@ -439,23 +439,20 @@ module.exports = function (app) {
   });
   app.post('/uploadPhotos', upload.array('photos'), async (req, res) => {
     try{
-      if(req.files) {
-          var urls = []
-          req.files.forEach( async (file) => {
-              const url = await service.uploadFile(file.path, uuidv4() + '-' + file.originalname)
-              urls.push(url)
-              fs.unlink(file.path, (err) => {
-                  if (err) throw err
-              })
-              if (urls.length == req.files.length) {
-                  res.json({ links: urls });
-              }
-          })
+      if(!req.files) {
+        throw new Error('No se pudo capturar la imagen.');
       }
-      else 
+      const file = req.files[0];
+      const url = await service.uploadFile(file.path, uuidv4() + '-' + file.originalname)
+      if (url == "invalid")
       {
-          throw new Error('No se pudo capturar la imagen.');
-      };
+        res.status(400).send("Este formato no es valido, solo se puede jpg, jpeg y png");
+        return;
+      }
+      fs.unlink(file.path, (err) => {
+          if (err) throw err
+      })
+      res.json({ links: url });
     }catch(error){
       res.status(404).send(`No se pudo guardar la imagen, ${error.message}`);
     }

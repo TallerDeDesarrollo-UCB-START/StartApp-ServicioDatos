@@ -292,12 +292,23 @@ class ProyectoServicio {
       throw new Error(`Algo inesperado paso con la Base de datos ${error.message}`);
     }
   }
-  async uploadFile(path, filename)
+  isCorrectFormat(fileType)
   {
-    try {
-      return await this.repository.uploadFile(path,filename)
+    return (fileType != "jpg" && fileType !="jpeg" && fileType !="png")
+  }
+  async uploadFile(path, filename){
+  try{
+      const fileParts =filename.split("."); 
+      const fileType = fileParts[fileParts.length-1];
+      console.error(fileType)
+      if (this.isCorrectFormat(fileType))
+      {
+        return "invalid";
+      }
+      return await this.repository.uploadFile(path,filename);
     } catch (error) {
-      throw new Error(`Algo inesperado paso con la Base de datos ${error.message}`);
+      console.error(error);
+      throw error;
     }
   }
 }
