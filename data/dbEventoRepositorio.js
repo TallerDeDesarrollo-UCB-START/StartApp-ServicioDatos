@@ -21,7 +21,7 @@ class DbEventRepository {
       );
     return categories;
   }
-  async getParticipantsEvents(idEvent) {
+  async getAllParticipantsForEvent(idEvent) {
     const participantsAnEvent = await pool.query(
       "SELECT us.id_usuario, us.nombre, us.apellido, us.rol, event.nombre_evento, us.telefono, event.hora_inicio, event.hora_fin FROM public.participantes_eventos as eve, public.usuarios as us, public.eventos as event WHERE eve.id_usuario=us.id_usuario AND eve.id_evento=$1 AND event.id=eve.id_evento;",
       [idEvent]
@@ -113,7 +113,7 @@ class DbEventRepository {
   }
 
   //Eliminar participacion de un evento
-  async deleteParticipation(idEvent, idUser) {
+  async deleteParticipationAnEvent(idEvent, idUser) {
     const deleteParticipacion = await pool.query(
       "DELETE FROM participantes_eventos WHERE id_evento = $1 AND id_usuario = $2",
       [idEvent, idUser]

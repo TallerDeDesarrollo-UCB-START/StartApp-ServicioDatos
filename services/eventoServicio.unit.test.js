@@ -15,7 +15,7 @@ describe('Testing all services of event',()=>{
         getCategories:()=>{
             return mockRepository.categories;
         },
-        getParticipantsEvents:(idEvent)=>{
+        getAllParticipantsForEvent:(idEvent)=>{
             return (mockRepository.events.filter((event)=>{ 
                 return event.id==idEvent
             }))[0].participantes
@@ -30,7 +30,7 @@ describe('Testing all services of event',()=>{
                 return event.id!=dataEvent.id??event 
             })
         },
-        deleteParticipation:(idEvent, idUser)=>{
+        deleteParticipationAnEvent:(idEvent, idUser)=>{
             return true
         },
         getEventsUser:(data)=>{
@@ -185,7 +185,7 @@ describe('Testing all services of event',()=>{
             id:2,
             nombre_evento:""
         }
-        const errorMessage=new Error("Algo inesperado paso con el repositorio");
+        const errorMessage=new Error("Something unexpected to happen in the repository");
         const response=await eventService.delete_evento(data);
         expect(response).toEqual(errorMessage)
     });
@@ -198,7 +198,7 @@ describe('Testing all services of event',()=>{
                     }
                 }
         }
-        const spyGetAllParticipants= jest.spyOn(mockRepository,'getParticipantsEvents')
+        const spyGetAllParticipants= jest.spyOn(mockRepository,'getAllParticipantsForEvent')
         const response=await eventService.get_participantes_eventos(data.req.rows.id);
         expect(spyGetAllParticipants).toHaveBeenCalledTimes(1)
         expect(response).toHaveLength(2)
@@ -220,7 +220,7 @@ describe('Testing all services of event',()=>{
     });
 
     it('Should not create new event and return fail message',async()=>{
-        const errorMessage=new Error("Algo inesperado paso con el repositorio")
+        const errorMessage=new Error("Something unexpected to happen in the repository")
         const data={
             id:3,
             nombre_evento:"",
@@ -249,7 +249,7 @@ describe('Testing all services of event',()=>{
     });
 
     it('Should not update one event and return fail message',async()=>{
-        const error=new Error("Algo inesperado paso con el repositorio");
+        const error=new Error("Something unexpected to happen in the repository");
         const data={
             id:3,
             nombre_evento:"",
@@ -271,14 +271,14 @@ describe('Testing all services of event',()=>{
             fechaFin:"18/09/25",
             participantes:[]
         };
-        const spyDeleteParticipant= jest.spyOn(mockRepository,'deleteParticipation')
+        const spyDeleteParticipant= jest.spyOn(mockRepository,'deleteParticipationAnEvent')
         const response=await eventService.eliminar_participacion(data.id,data.id);
         expect(spyDeleteParticipant).toHaveBeenCalledTimes(1)
         expect(response).toEqual(true)
     });
 
     it('Should not delete one participant and return fail message',async()=>{
-        const errorMessage=new Error("Error al eliminar participacion");
+        const errorMessage=new Error("Cannot delete participation on the event");
         const data={
             id:3,
             nombre_evento:"",
@@ -287,7 +287,7 @@ describe('Testing all services of event',()=>{
             fechaFin:"18/09/25",
             participantes:[]
         };
-        const spyDeleteParticipant= jest.spyOn(mockRepository,'deleteParticipation').mockImplementation(async()=>Promise.reject(new Error("a")))
+        const spyDeleteParticipant= jest.spyOn(mockRepository,'deleteParticipationAnEvent').mockImplementation(async()=>Promise.reject(new Error("a")))
         const response=await eventService.eliminar_participacion(data.id,data.id).catch(e=>e);
         expect(spyDeleteParticipant).toHaveBeenCalledTimes(1)
         expect(response).toEqual(errorMessage)
@@ -309,7 +309,7 @@ describe('Testing all services of event',()=>{
     });
 
     it('Should not update one event and return error message',async()=>{
-        const error=new Error("Algo inesperado paso con el repositorio");
+        const error=new Error("Something unexpected to happen in the repository");
         const data={
             id:3,
             nombre_evento:"",
@@ -338,7 +338,7 @@ describe('Testing all services of event',()=>{
     });
 
     it('Should not update one event and return error message',async()=>{
-        const error=new Error("Error al actualizar evento!");
+        const error=new Error("Cannot updated the event");
         const data={
             id:3,
             nombre_evento:"",
@@ -381,7 +381,7 @@ describe('Testing all services of event',()=>{
             fechaFin:"18/09/25",
             participantes:[]
         };
-        const errorMessage="El 1 del evento no existe"
+        const errorMessage="The event with id: 1 does not exist"
         const spyParticipate= jest.spyOn(mockRepository,'participateEvent').mockImplementation(()=>Promise.reject(new Error()))
         const response=await eventService.participate_evento(user.id,data.id).catch((error)=>{return error})
         expect(spyParticipate).toHaveBeenCalledTimes(1)
@@ -455,7 +455,7 @@ describe('Testing all services of event',()=>{
 
     it('Should not return events on one participant and return fail message',async ()=>{
         const data=""
-        const errorMessage="Algo inesperado paso con la Base de datos o el id del participante no existe"
+        const errorMessage="Something unexpected to happen in the repository or the id of the event does not exist"
         const spyLeaders= jest.spyOn(mockRepository,'getMyEvents').mockImplementation(()=>Promise.reject(new Error()))
         const response=await eventService.get_my_eventos(data).catch((error)=>{return error})
         expect(spyLeaders).toHaveBeenCalledTimes(1)

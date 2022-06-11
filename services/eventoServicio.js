@@ -7,7 +7,7 @@ class EventoServicio {
     let answer=true;
     try {
       if (this.checkValidateNameEvent(data)) {
-        throw new Error("Por favor ingrese un nombre del evento");//Please insert name for the event
+        throw new Error("Please insert name for the event");
       }
     } catch (error) {
       console.error(error.message);
@@ -30,13 +30,13 @@ class EventoServicio {
   }
 
   async get_participantes_eventos(data) {
-    return await this.repository.getParticipantsEvents(data);//getAllParticipantsForEvent
+    return await this.repository.getAllParticipantsForEvent(data);//getAllParticipantsForEvent
   }
 
   //Eliminar participacion en un evento
   async eliminar_participacion(idEvento, idUsuario) {
     try {
-      return await this.repository.deleteParticipation(idEvento, idUsuario);//deleteParticipationAnEvent
+      return await this.repository.deleteParticipationAnEvent(idEvento, idUsuario);//deleteParticipationAnEvent
     } catch (error) {
       return new Error("Error al eliminar participacion");
     }
@@ -55,7 +55,7 @@ class EventoServicio {
       if (this.validate(data)) {
         return await this.repository.createEvent(data);
       } else {
-        throw new Error("Algo inesperado paso con el repositorio");//Cannot create the event or Something unexpected to happen in the repository 
+        throw new Error("Something unexpected to happen in the repository"); 
       }
     } catch (error) {
       console.error(error.message);
@@ -68,7 +68,7 @@ class EventoServicio {
       if (this.validate(data)) {
         return await this.repository.deleteEvent(data);
       } else {
-        throw new Error("Algo inesperado paso con el repositorio");//Can not create the event or Something unexpected to happen in the repository
+        throw new Error("Something unexpected to happen in the repository");
       }
     } catch (error) {
       console.error(error.message);
@@ -81,7 +81,7 @@ class EventoServicio {
       if (this.validate(data)) {
         return await this.repository.updateStateEvent1(data);
       } else {
-        throw new Error("Algo inesperado paso con el repositorio");// Somthing unexpected to happen in the repository
+        throw new Error("Something unexpected to happen in the repository");
       }
     } catch (error) {
       console.error(error.message);
@@ -94,7 +94,7 @@ class EventoServicio {
       if (this.validate(data)) {
         return await this.repository.updateStateEvent2(data);
       } else {
-        throw new Error("Algo inesperado paso con el repositorio");// Somthing unexpected to happen in the repository
+        throw new Error("Something unexpected to happen in the repository");
       }
     } catch (error) {
       console.error(error.message);
@@ -107,7 +107,7 @@ class EventoServicio {
       if (this.validate(data)) {
         return await this.repository.updateEvent(data, id);
       } else {
-        throw new Error("Error al actualizar evento!");//Cannot updated the event
+        throw new Error("Cannot updated the event");
       }
     } catch (error) {
       console.error(error.message);
@@ -119,7 +119,7 @@ class EventoServicio {
     try {
       return await this.repository.participateEvent(id, id_autenticacion);
     } catch (error) {
-      throw new Error("El " + id.toString() + " del evento no existe"); // The event "" does not exist   
+      throw new Error("The event with id: " + id.toString() + " does not exist");  
     }
   }
 
@@ -146,9 +146,7 @@ class EventoServicio {
       });
       return sorted_list;
     } catch (error) {
-      throw new Error(
-        "Algo inesperado paso con la Base de datos o el id del participante no existe" //Something unexpected to happen in the repository or the id of the event does not exist 
-      );
+      throw new Error("Something unexpected to happen in the repository or the id of the event does not exist" );
     }
   }
 }
