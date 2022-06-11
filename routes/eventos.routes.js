@@ -1,6 +1,6 @@
-const Service = require("../services/eventService");
-const repository = require("../data/dbEventRepository.js");
-const eventService = new Service(new repository());
+const EventService = require("../services/eventService");
+const DbEventRepository = require("../data/dbEventRepository.js");
+const eventService = new EventService(new DbEventRepository());
 
 module.exports = function (app) {
   app.post("/eventos/crearevento", async (req, res) => {
