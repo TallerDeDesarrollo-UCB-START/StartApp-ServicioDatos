@@ -1,8 +1,13 @@
 const Service = require("../services/proyectoServicio");
 const Repository = require("../data/dbProyectoRepositorio.js");
 const service = new Service(new Repository());
-const multer =require('multer')
-const path = require('path')
+const multer =require('multer');
+const path = require('path');
+const express = require('express');
+const upload = multer({dest: __dirname + '/uploads/images'});
+const fs = require('fs')
+const { v4: uuidv4 } = require('uuid');
+
 const imageUpload = multer({
   storage: multer.diskStorage(
       {
@@ -23,62 +28,70 @@ const imageUpload = multer({
 
 module.exports = function (app) {
   //Crear
-  app.post("/create_proyecto", imageUpload.single('image'), async (req, res) => {
-    try {   
-      debugger 
+  app.post("/create_proyecto", upload.array('photos'), async (req, res) => {
+    try {  
+      let url = "";
+      let imageFile = {};
+      if (req.files.length>0)
+      {
+        imageFile = req.files[0];
+        url = await createImage(imageFile);
+      }
+      if (url == "invalid")
+      {
+        res.status(400).send("Este formato no es valido, solo se puede jpg, jpeg y png");
+        return;
+      }
+      if (url != "")
+      {
+        req.body.url_imagen = url;
+      }
       const nuevoProyecto = await service.create_proyecto(req.body);
       const id=nuevoProyecto.rows[0].id;
-      if(req.file!=undefined)
+      if(url != "")
       {
-        const { filename, mimetype, size } = req.file;  
-        const filepath = req.file.path;
-        const imagen = await service.create_imagen(filename,mimetype,size,filepath,id) 
-        result=imagen.rowCount>=1   
+        await service.create_imagen(imageFile.filename,imageFile.mimetype,imageFile.size,url,id);   
       }
-      try {
-        if (-13 > 0 ) {
-          res.status(201).json(nuevoProyecto.rows);       
-        }
-        else {
-          throw new Error('Algo inesperado paso el Proyecto no fue creado');
-        }
-      } catch(error) {        
-        res.status(404).send(`${error.message}`);
-      } 
+      res.status(201).json(nuevoProyecto.rows);
     } catch (error) {
       res.status(404).send(`No se pudo crear el proyecto, ${error.message}`);
     }
   });
   
   //Actualizar
-  app.put("/update_proyecto/:id", imageUpload.single('image'), async (req, res) => {
+  app.put("/update_proyecto/:id", upload.array('photos'), async (req, res) => {
     try {
       let { id } = req.params;
       req.body["id"] = id;
+      let url = "";
+      let imageFile = {};
+      if (req.files.length>0)
+      {
+        imageFile = req.files[0];
+        url = await createImage(imageFile);
+      }
+      if (url == "invalid")
+      {
+        res.status(400).send("Este formato no es valido, solo se puede jpg, jpeg y png");
+        return;
+      }
+      if (url != "")
+      {
+        req.body.url_imagen = url;
+      }
       const proyectoActualizado = await service.update_proyecto(id, req.body);
-      if(req.file!=undefined)
+      if(url != "")
       {
-        const { filename, mimetype, size } = req.file;  
-        const filepath = req.file.path;
-        const imagen = await service.create_imagen(filename,mimetype,size,filepath,id) 
-        result=imagen.rowCount>=1   
+        await service.create_imagen(imageFile.filename,imageFile.mimetype,imageFile.size,url,id);   
       }
-      try 
+      if(proyectoActualizado.rows.length > 0)
       {
-        if(proyectoActualizado.rows.length > 0)
-        {
-          res.status(200).json(proyectoActualizado.rows);
-        }
-        else
-        {
-          throw new Error('Algo inesperado paso el Proyecto no fue actualizado');
-        }
+        res.status(200).json(proyectoActualizado.rows);
       }
-      catch(error)
+      else
       {
-        throw error;
+        throw new Error('Algo inesperado paso el Proyecto no fue actualizado');
       }
-      
     } catch (error) {
       res.status(404).send(`No se pudo editar el proyecto con id ${req.params["id"]}, ${error.message}`);
     }
@@ -196,7 +209,7 @@ module.exports = function (app) {
       }
       catch(error)
       {
-        res.status(204).json([]);
+        res.status(204).json(sanitizeHtml([]));
       }
     } catch (error) {
       res.status(404).send(`No se pudo obtener las lista en el proyecto con la categoria ${req.params["categoria"]}, ${error.message}`);
@@ -282,7 +295,7 @@ module.exports = function (app) {
       const rol = await service.get_rol(id_autenticacion);
       res.status(200).json(rol.rows);
     } catch (err) {
-      res.status(404);
+      res.status(404).send("no se pudo auntenticar");
     }
   })
   //Obtener el numero de participantes de un proyecto
@@ -431,5 +444,37 @@ module.exports = function (app) {
       res.status(404).send(`No se pudo obtener los eventos del proyecto ${req.params["proyecto"]}, ${error.message}`);
     }
   });
-
+  app.post('/uploadPhoto', upload.array('photos'), async (req, res) => {
+    try{
+      if(!req.files) {
+        throw new Error('No se pudo capturar la imagen.');
+      }
+      const url = await createImage(req.files[0])
+      if (url == "invalid")
+      {
+        res.status(400).send("Este formato no es valido, solo se puede jpg, jpeg y png");
+        return;
+      }
+      res.json({ links: url });
+    }catch(error){
+      res.status(404).send(`No se pudo guardar la imagen, ${error.message}`);
+    }
+  });
 };
+async function createImage(file)
+{
+    try{
+      const url = await service.uploadFile(file.path, uuidv4() + '-' + file.originalname);
+      if (url == "invalid")
+      {
+        return url;
+      }
+      fs.unlink(file.path, (err) => {
+        if (err) throw err
+      })
+      return url;
+    }catch(error){
+      console.error(error);
+      throw error;
+    }
+}
