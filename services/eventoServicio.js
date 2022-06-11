@@ -22,35 +22,35 @@ class EventoServicio {
 
   }
 
-  async get_eventos(data) {
+  async getEvents(data) {
     return await this.repository.getEvents(data);
   }
-  async get_categorias(data) {
+  async getCategories(data) {
     return await this.repository.getCategories(data);
   }
 
-  async get_participantes_eventos(data) {
-    return await this.repository.getAllParticipantsForEvent(data);//getAllParticipantsForEvent
+  async getAllParticipantsForEvent(data) {
+    return await this.repository.getAllParticipantsForEvent(data);
   }
 
   //Eliminar participacion en un evento
-  async eliminar_participacion(idEvento, idUsuario) {
+  async deleteParticipationAnEvent(idEvento, idUsuario) {
     try {
-      return await this.repository.deleteParticipationAnEvent(idEvento, idUsuario);//deleteParticipationAnEvent
+      return await this.repository.deleteParticipationAnEvent(idEvento, idUsuario);
     } catch (error) {
       return new Error("Error al eliminar participacion");
     }
   }
 
-  async get_eventos_usuario(data) {
-    return await this.repository.getEventsUser(data);//getEventsForUser
+  async getEventsUser(data) {
+    return await this.repository.getEventsUser(data);
   }
 
-  async get_evento(data) {
+  async getEvent(data) {
     return await this.repository.getEvent(data);
   }
 
-  async create_evento(data) {
+  async createEvent(data) {
     try {
       if (this.validate(data)) {
         return await this.repository.createEvent(data);
@@ -63,7 +63,7 @@ class EventoServicio {
     }
   }
 
-  async delete_evento(data) {
+  async deleteEvent(data) {
     try {
       if (this.validate(data)) {
         return await this.repository.deleteEvent(data);
@@ -89,7 +89,7 @@ class EventoServicio {
     }
   }
   //actualizar estado para mostrar
-  async update_evento_estado2(data) {
+  async updateStateEvent2(data) {
     try {
       if (this.validate(data)) {
         return await this.repository.updateStateEvent2(data);
@@ -102,7 +102,7 @@ class EventoServicio {
     }
   }
 
-  async actualizar_evento(data, id) {
+  async updateEvent(data, id) {
     try {
       if (this.validate(data)) {
         return await this.repository.updateEvent(data, id);
@@ -115,7 +115,7 @@ class EventoServicio {
     }
   }
 
-  async participate_evento(id, id_autenticacion) {
+  async participateEvent(id, id_autenticacion) {
     try {
       return await this.repository.participateEvent(id, id_autenticacion);
     } catch (error) {
@@ -124,12 +124,12 @@ class EventoServicio {
   }
 
   //Obtener Lideres
-  async get_lideres(data) {
+  async getLeaders(data) {
     return await this.repository.getLeaders(data);
   }
 
   //Obtener participaciones en eventos de 1 voluntario
-  async get_my_eventos(id_autenticacion) {
+  async getMyEvents(id_autenticacion) {
     try {
       let list_of_participant = await this.repository.getMyEvents(
         id_autenticacion
