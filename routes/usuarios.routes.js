@@ -8,13 +8,13 @@ module.exports = function (app) {
       let data_to_send = JSON.stringify(newVolunteer.rows[0]);
       res
         .status(201)
-        .send(
+        .json(
           `{"message":"La informacion del usuario fue agregada", "data": ${data_to_send}}`
         );
     } catch (error) {
       res
         .status(400)
-        .send(`{ "message": ${error}, "data": ""}`);
+        .json(`{ "message": ${error}, "data": ""}`);
     }
   });
 
@@ -25,11 +25,11 @@ module.exports = function (app) {
       let data_to_send = JSON.stringify(changedVolunteer.rows[0]);
       res
         .status(202)
-        .send(`{"message":"Actualizacion exitosa!", "data": ${data_to_send}}`);
+        .json(`{"message":"Actualizacion exitosa!", "data": ${data_to_send}}`);
     } catch (error) {
       res
         .status(400)
-        .send(`{"message":"Los cambios no fueron exitosos.", "data":false}`);
+        .json(`{"message":"Los cambios no fueron exitosos.", "data":false}`);
     }
   });
 
@@ -39,12 +39,12 @@ module.exports = function (app) {
         req.params.id
       );
       let data_to_send = JSON.stringify(newVolunteer.rows[0]);
-      res.status(200).send(`{"message":"", "data": ${data_to_send}}`);
+      res.status(200).json(`{"message":"", "data": ${data_to_send}}`);
     } catch (err) {
       console.error(err.message);
       res
         .status(204)
-        .send(
+        .json(
           `{ "message": "El voluntario con id ${req.params.id} no existe"", "data": ""}`
         );
     }
@@ -54,10 +54,10 @@ module.exports = function (app) {
     try {
       const volunteers = await usuarioService.get_volunteers_data();
       let data_to_send = JSON.stringify(volunteers.rows);
-      res.status(200).send(`{"message":"", "data": ${data_to_send}}`);
+      res.status(200).json(`{"message":"", "data": ${data_to_send}}`);
     } catch (err) {
       console.error(err.message);
-      res.status(404).send(`{ "message": "No hay usuarios", "data": ""}`);
+      res.status(404).json(`{ "message": "No hay usuarios", "data": ""}`);
     }
   });
 
@@ -68,10 +68,10 @@ module.exports = function (app) {
       );
 
       let data_to_send = JSON.stringify(insignias);
-      res.status(200).send(`{"message":"", "data": ${data_to_send}}`);
+      res.status(200).json(`{"message":"", "data": ${data_to_send}}`);
     } catch (err) {
       res
-        .status(404).send(`{ "message": "El usuario con id ${req.params.id} no existe"", "data": ""}`);
+        .status(404).json(`{ "message": "El usuario con id ${req.params.id} no existe"", "data": ""}`);
     }
   });
 
@@ -80,9 +80,9 @@ module.exports = function (app) {
       const insignias = await usuarioService.get_insignias();
 
       let data_to_send = JSON.stringify(insignias.rows);
-      res.status(200).send(`{"message":"", "data": ${data_to_send}}`);
+      res.status(200).json(`{"message":"", "data": ${data_to_send}}`);
     } catch (error) {
-      res.status(404).send(`{ "message": "No se pudo recuperar las insignias, ${error.message}"", "data": ""}`);
+      res.status(404).json(`{ "message": "No se pudo recuperar las insignias, ${error.message}"", "data": ""}`);
     }
   });
 
@@ -96,9 +96,9 @@ module.exports = function (app) {
       let data_to_send = JSON.stringify(changedVolunteer);
       res
         .status(202)
-        .send(`{"message":"Actualizado exitosamente!", "data": ${data_to_send}}`);
+        .json(`{"message":"Actualizado exitosamente!", "data": ${data_to_send}}`);
     } catch (error) {
-      res.status(400).send(`{"message":"Cambios no fueron guardados, ${error.message}", "data":false}`);
+      res.status(400).json(`{"message":"Cambios no fueron guardados, ${error.message}", "data":false}`);
     }
   });
   app.delete("/disable_user/:id", async (req, res) => {
@@ -107,18 +107,18 @@ module.exports = function (app) {
       if (stateOfDisable) {
         res
           .status(205)
-          .send(
+          .json(
             `{"message":"Usuario fue desahabilitado exitosamente.", "data": ${stateOfDisable}}`
           );
       } else {
         res
           .status(500)
-          .send(`{"message":"Usuario no fue desahabilitado.", "data": ${stateOfDisable}}`);
+          .json(`{"message":"Usuario no fue desahabilitado.", "data": ${stateOfDisable}}`);
       }
     } catch (error) {
       res
         .status(400)
-        .send(`{"message":"Cambios no fueron guardados, ${error.message}", "data":false}`);
+        .json(`{"message":"Cambios no fueron guardados, ${error.message}", "data":false}`);
     }
   });
 };
