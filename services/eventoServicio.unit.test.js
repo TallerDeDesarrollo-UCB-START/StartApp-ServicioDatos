@@ -9,11 +9,11 @@ describe('Testing all services of event',()=>{
         createEvent:(data)=>{ 
             mockRepository.events.push(data);return true
         },
-        getEvents:(data)=>{
-            data;return mockRepository.events
+        getEvents:()=>{
+            return mockRepository.events;
         },
-        getCategories:(data)=>{
-            data;return mockRepository.categories
+        getCategories:()=>{
+            return mockRepository.categories;
         },
         getParticipantsEvents:(idEvent)=>{
             return (mockRepository.events.filter((event)=>{ 

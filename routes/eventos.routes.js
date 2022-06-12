@@ -1,7 +1,9 @@
 const ServiceEvento = require("../services/eventoServicio");
 const Repository = require("../data/dbEventoRepositorio.js");
 const service_evento = new ServiceEvento(new Repository());
-
+function sanitizeHTML(text) {
+  return $('<div>').text(text).html();
+}
 module.exports = function (app) {
   app.post("/eventos/crearevento", async (req, res) => {
     //Crear
@@ -9,7 +11,7 @@ module.exports = function (app) {
       const nuevoEvento = await service_evento.create_evento(req.body);
       res.status(201).json(req.body);
     } catch (error) {
-      res.status(400).send(`{"message":"Cambios no fueron guardados, ${error.message}", "data":false}`);
+      res.status(400).send(sanitizeHTML(`{"message":"Cambios no fueron guardados, ${error.message}", "data":false}`));
     }
   });
 
@@ -18,7 +20,7 @@ module.exports = function (app) {
       const nuevoProyecto = await service_evento.get_eventos(req);
       res.status(200).json(nuevoProyecto.rows);
     } catch (error) {
-      res.status(404).send(`{"message":"No se pudo obtener los eventos, ${error.message}", "data":false}`);
+      res.status(404).send(sanitizeHTML(`{"message":"No se pudo obtener los eventos, ${error.message}", "data":false}`));
     }
   });
 
@@ -27,7 +29,7 @@ module.exports = function (app) {
       const categorias = await service_evento.get_categorias(req);
       res.status(200).json(categorias.rows);
     } catch (error) {
-      res.status(404).send(`{"message":"No se pudo obtener las categorias de eventos, ${error.message}", "data":false}`);
+      res.status(404).send(sanitizeHTML(`{"message":"No se pudo obtener las categorias de eventos, ${error.message}", "data":false}`));
     }
   });
 
@@ -37,7 +39,7 @@ module.exports = function (app) {
         await service_evento.get_participantes_eventos(req.params["id"]);
       res.status(200).json(participantes_eventos.rows);
     } catch (error) {
-      res.status(404).send(`{"message":"No se pudo obtener los participantes del evento con id ${req.params["id"]}, ${error.message}", "data":false}`);
+      res.status(404).send(sanitizeHTML(`{"message":"No se pudo obtener los participantes del evento con id ${req.params["id"]}, ${error.message}", "data":false}`));
     }
   });
 
@@ -46,7 +48,7 @@ module.exports = function (app) {
       const nuevoEvento = await service_evento.get_evento(req);
       res.status(200).json(nuevoEvento.rows);
     } catch (error) {
-      res.status(404).send(`{"message":"No se pudo obtener el evento con el id ${req.params["id"]}, ${error.message}", "data":false}`);
+      res.status(404).send(sanitizeHTML(`{"message":"No se pudo obtener el evento con el id ${req.params["id"]}, ${error.message}", "data":false}`));
     }
   });
   app.post(
@@ -60,7 +62,7 @@ module.exports = function (app) {
         );
         res.status(200).json(true);
       } catch (error) {
-        res.status(400).send(`{"message":"No se pudo participar en el evento con el id ${req.params["id"]}, ${error.message}", "data":false}`);
+        res.status(400).send(sanitizeHTML(`{"message":"No se pudo participar en el evento con el id ${req.params["id"]}, ${error.message}", "data":false}`));
       }
     }
   );
@@ -71,7 +73,7 @@ module.exports = function (app) {
       const eliminarEvento = await service_evento.delete_evento(id, req.body);
       res.status(200).json(eliminarEvento.rows);
     } catch (error) {
-      res.status(404).send(`{"message":"No se pudo eliminar el evento con el id ${req.params["id"]}, ${error.message}", "data":false}`);
+      res.status(404).send(sanitizeHTML(`{"message":"No se pudo eliminar el evento con el id ${req.params["id"]}, ${error.message}", "data":false}`));
     }
   });
 
@@ -84,7 +86,7 @@ module.exports = function (app) {
       );
       res.status(200).json(archivarEvento.rows);
     } catch (error) {
-      res.status(404).send(`{"message":"No se pudo editar el evento con el id ${req.params["id"]}, ${error.message}", "data":false}`);
+      res.status(404).send(sanitizeHTML(`{"message":"No se pudo editar el evento con el id ${req.params["id"]}, ${error.message}", "data":false}`));
     }
     try {
       const changedVolunteer = await service_form.do_changes(id, req.body);
@@ -95,7 +97,7 @@ module.exports = function (app) {
     } catch (error) {
       res
         .status(400)
-        .send(`{"message":"Cambios no fueron guardados", "data":false}`);
+        .send(sanitizeHTML(`{"message":"Cambios no fueron guardados", "data":false}`));
     }
   });
 
@@ -109,7 +111,7 @@ module.exports = function (app) {
       );
       res.status(200).json(archivarEvento.rows);
     } catch (error) {
-      res.status(400).send(`{"message":"No se pudo editar el mostrar evento con el id ${req.params["id"]}, ${error.message}", "data":false}`);
+      res.status(400).send(sanitizeHTML(`{"message":"No se pudo editar el mostrar evento con el id ${req.params["id"]}, ${error.message}", "data":false}`));
     }
   });
 
@@ -120,7 +122,7 @@ module.exports = function (app) {
       );
       res.status(200).json(eventosDelUsuario.rows);
     } catch (error) {
-      res.status(404).send(`{"message":"No se pudo obtener los eventos del usuario con id ${req.params["id"]}, ${error.message}", "data":false}`);
+      res.status(404).send(sanitizeHTML(`{"message":"No se pudo obtener los eventos del usuario con id ${req.params["id"]}, ${error.message}", "data":false}`));
     }
   });
 
@@ -129,7 +131,7 @@ module.exports = function (app) {
       const lideres = await service_evento.get_lideres(req);
       res.status(200).json(lideres.rows);
     } catch (error) {
-      res.status(404).send(`{"message":"No se pudo obtener los lideres, ${error.message}", "data":false}`);
+      res.status(404).send(sanitizeHTML(`{"message":"No se pudo obtener los lideres, ${error.message}", "data":false}`));
     }
   });
 
@@ -142,7 +144,7 @@ module.exports = function (app) {
           await service_evento.eliminar_participacion(idEvento, idUsuario);
         res.status(200).json(eliminarParticipacion.rows);
       } catch (error) {
-        res.status(404).send(`{"message":"No se pudo eliminar la participacion del usuari con id ${req.params["idUsuario"]}, ${error.message}", "data":false}`);
+        res.status(404).send(sanitizeHTML(`{"message":"No se pudo eliminar la participacion del usuari con id ${req.params["idUsuario"]}, ${error.message}", "data":false}`));
       }
     }
   );
