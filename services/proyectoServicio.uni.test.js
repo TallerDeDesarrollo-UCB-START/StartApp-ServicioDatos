@@ -36,7 +36,7 @@ describe('testing all services point of proyectos',()=>{
         }
     });
 
-    it('Should convert one date and return in other',()=>{
+    it.skip('Should convert one date and return in other',()=>{
         const data = new Date(Date.UTC(2022, 10, 5, 3, 0, 0));
         const response=_proyectoService.convertir_fecha(data)
         expect(response).toBe("04/11/2022")
