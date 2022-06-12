@@ -39,7 +39,7 @@ module.exports = function (app) {
       }
       if (url == "invalid")
       {
-        res.status(400).send("Este formato no es valido, solo se puede jpg, jpeg y png");
+        res.status(400).json("Este formato no es valido, solo se puede jpg, jpeg y png");
         return;
       }
       if (url != "")
@@ -54,7 +54,7 @@ module.exports = function (app) {
       }
       res.status(201).json(nuevoProyecto.rows);
     } catch (error) {
-      res.status(404).send(`No se pudo crear el proyecto, ${error.message}`);
+      res.status(404).json(`No se pudo crear el proyecto, ${error.message}`);
     }
   });
   
@@ -72,7 +72,7 @@ module.exports = function (app) {
       }
       if (url == "invalid")
       {
-        res.status(400).send("Este formato no es valido, solo se puede jpg, jpeg y png");
+        res.status(400).json("Este formato no es valido, solo se puede jpg, jpeg y png");
         return;
       }
       if (url != "")
@@ -93,7 +93,7 @@ module.exports = function (app) {
         throw new Error('Algo inesperado paso el Proyecto no fue actualizado');
       }
     } catch (error) {
-      res.status(404).send(`No se pudo editar el proyecto con id ${req.params["id"]}, ${error.message}`);
+      res.status(404).json(`No se pudo editar el proyecto con id ${req.params["id"]}, ${error.message}`);
     }
   });
   app.delete("/delete_proyecto/:id", async (req, res) => {
@@ -102,7 +102,7 @@ module.exports = function (app) {
       const proyectoElimanado = await service.delete_proyecto(id);
       res.status(200).json(proyectoElimanado.rows);
     } catch (error) {
-      res.status(404).send(`No se pudo eliminar el proyecto con id ${req.params["id"]}, ${error.message}`);
+      res.status(404).json(`No se pudo eliminar el proyecto con id ${req.params["id"]}, ${error.message}`);
     }
   });
   //Obtener
@@ -125,7 +125,7 @@ module.exports = function (app) {
         res.status(204).json([]);
       }
     } catch (error) {
-      res.status(404).send(`No se pudo obtener los proyectos, ${error.message}`);
+      res.status(404).json(`No se pudo obtener los proyectos, ${error.message}`);
     }
   });
   //Obtener
@@ -148,7 +148,7 @@ module.exports = function (app) {
         res.status(204).json([]);
       }
     } catch (error) {
-      return res.status(404).send(`No se pudo obtener el proyecto con id ${req.params["id"]}, ${error.message}`);
+      return res.status(404).json(`No se pudo obtener el proyecto con id ${req.params["id"]}, ${error.message}`);
     }
   });
   //Participar en proyecto
@@ -163,7 +163,7 @@ module.exports = function (app) {
         );
         res.status(200).json(proyecto_a_actualizar);
       } catch (error) {
-        res.status(404).send(`No se pudo participar en el proyecto con id ${req.params["id"]}, ${error.message}`);
+        res.status(404).json(`No se pudo participar en el proyecto con id ${req.params["id"]}, ${error.message}`);
       }
     }
   );
@@ -175,7 +175,7 @@ module.exports = function (app) {
         const esta_participando=await service.participation(id,id_autenticacion);
         res.status(200).json(esta_participando);
       }catch(error){
-        res.status(404).send(`No se pudo participar en el proyecto con id ${req.params["id"]}, ${error.message}`);
+        res.status(404).json(`No se pudo participar en el proyecto con id ${req.params["id"]}, ${error.message}`);
       }
     }
   )
@@ -185,10 +185,10 @@ module.exports = function (app) {
       const {id}= req.params;
       const lista_simple = await service.get_participantes_proyecto_simple(id);
       if(lista_simple==false)
-        res.status(404).send("El proyecto con id: "+ parseInt(id).toString()  +    " no existe");
+        res.status(404).json("El proyecto con id: "+ parseInt(id).toString()  +    " no existe");
       res.status(200).json(lista_simple.rows);
     } catch (error) {
-      res.status(404).send(`No se pudo obtener las lista en el proyecto con id ${req.params["id"]}, ${error.message}`);
+      res.status(404).json(`No se pudo obtener las lista en el proyecto con id ${req.params["id"]}, ${error.message}`);
     }
   });
   //Obtener Proyectos por categoria
@@ -212,7 +212,7 @@ module.exports = function (app) {
         res.status(204).json([]);
       }
     } catch (error) {
-      res.status(404).send(`No se pudo obtener las lista en el proyecto con la categoria ${req.params["categoria"]}, ${error.message}`);
+      res.status(404).json(`No se pudo obtener las lista en el proyecto con la categoria ${req.params["categoria"]}, ${error.message}`);
     }
   });
 
@@ -235,7 +235,7 @@ module.exports = function (app) {
         res.status(204).json([]);
       }
     } catch (error) {
-      res.status(404).send(`No se pudo obtener las categorias del proyecto con el id ${req.params["id"]}, ${error.message}`);
+      res.status(404).json(`No se pudo obtener las categorias del proyecto con el id ${req.params["id"]}, ${error.message}`);
     }
   });
 
@@ -248,7 +248,7 @@ module.exports = function (app) {
         );
         res.status(200).json(voluntario_retirado);
       } catch (error) {
-        res.status(404).send(`No se pudo eliminar la participacion del usuario del proyecto con el id ${req.params["id"]}, ${error.message}`);
+        res.status(404).json(`No se pudo eliminar la participacion del usuario del proyecto con el id ${req.params["id"]}, ${error.message}`);
       }
     }
   );
@@ -258,13 +258,13 @@ module.exports = function (app) {
       const {id_autenticacion}=req.params;
       const mis_proyectos=await service.get_my_proyectos(id_autenticacion);
       if(mis_proyectos==false)
-        res.status(204).send(`El usuario con id : ${parseInt(id_autenticacion).toString()} no tiene proyectos participando.`);
+        res.status(204).json(`El usuario con id : ${parseInt(id_autenticacion).toString()} no tiene proyectos participando.`);
       else
       {
         res.status(200).json(mis_proyectos.rows);
       }
     }catch(error){
-      res.status(404).send(`No se pudo obtener los proyectos en los que esta el usuario con el id ${req.params["id_autenticacion"]}, ${error.message}`);
+      res.status(404).json(`No se pudo obtener los proyectos en los que esta el usuario con el id ${req.params["id_autenticacion"]}, ${error.message}`);
     }
   }); 
 
@@ -274,7 +274,7 @@ module.exports = function (app) {
       const lideres = await service.get_lideres();
       res.status(200).json(lideres.rows);
     } catch (error) {
-      res.status(404).send(`No se pudo obtener los lideres, ${error.message}`);
+      res.status(404).json(`No se pudo obtener los lideres, ${error.message}`);
     }
   })
 
@@ -283,7 +283,7 @@ module.exports = function (app) {
       const roles = await service.get_roles();
       res.status(200).json(roles.rows);
     } catch (error) {
-      res.status(404).send(`No se pudo obtener los roles, ${error.message}`);
+      res.status(404).json(`No se pudo obtener los roles, ${error.message}`);
     }
   })
 
@@ -295,7 +295,7 @@ module.exports = function (app) {
       const rol = await service.get_rol(id_autenticacion);
       res.status(200).json(rol.rows);
     } catch (err) {
-      res.status(404).send("no se pudo auntenticar");
+      res.status(404).json("no se pudo auntenticar");
     }
   })
   //Obtener el numero de participantes de un proyecto
@@ -305,7 +305,7 @@ module.exports = function (app) {
       const numero_participantes_proyecto = await service.get_numero_participantes(id);
       res.status(200).json(numero_participantes_proyecto);
     } catch (error) {
-      res.status(404).send(`No se pudo obtener el numero de participantes en el proyecto con el id ${req.params["id"]}, ${error.message}`);
+      res.status(404).json(`No se pudo obtener el numero de participantes en el proyecto con el id ${req.params["id"]}, ${error.message}`);
     }
   });
 
@@ -329,7 +329,7 @@ module.exports = function (app) {
         res.status(204).json([]);
       }
     } catch (error) {
-      res.status(404).send(`No se pudo obtener los eventos del proyecto con el id ${req.params["id"]}, ${error.message}`);
+      res.status(404).json(`No se pudo obtener los eventos del proyecto con el id ${req.params["id"]}, ${error.message}`);
     }
   });
 
@@ -348,7 +348,7 @@ module.exports = function (app) {
         res.status(204).json([]);
       }
     } catch (error) {
-      res.status(404).send(`No se pudo obtener los proyecto acabados, ${error.message}`); 
+      res.status(404).json(`No se pudo obtener los proyecto acabados, ${error.message}`); 
     }
   });
   //Obtener Proyectos por categoria
@@ -370,7 +370,7 @@ module.exports = function (app) {
         res.status(204).json([]);
       }
     } catch (error) {
-      res.status(404).send(`No se pudo obtener los proyecto acabados con la categoria ${req.params["categoria"]}, ${error.message}`);  
+      res.status(404).json(`No se pudo obtener los proyecto acabados con la categoria ${req.params["categoria"]}, ${error.message}`);  
     }
   });
 
@@ -382,7 +382,7 @@ module.exports = function (app) {
         const proyecto_a_actualizar = await service.participate_past_proyecto(id_proyecto,id_autenticacion,id_volunteer)
         res.status(200).json(proyecto_a_actualizar);
       } catch (error) {
-        res.status(404).send(`No se pudo meter al usuario ${req.params["id_autenticacion"]} en el proyecto ${req.params["id_proyecto"]}, ${error.message}`);  
+        res.status(404).json(`No se pudo meter al usuario ${req.params["id_autenticacion"]} en el proyecto ${req.params["id_proyecto"]}, ${error.message}`);  
       }
     }
   );
@@ -392,7 +392,7 @@ module.exports = function (app) {
       const usuarios = await service.get_usuarios();
       res.status(200).json(usuarios.rows);
     } catch (err) {
-      res.status(404).send(`No se pudo obtener los usuarios, ${error.message}`);  
+      res.status(404).json(`No se pudo obtener los usuarios, ${error.message}`);  
     }
   })
 
@@ -413,7 +413,7 @@ module.exports = function (app) {
         }  
       }
       catch (error) {
-        res.status(404).send(`No se pudo crear la imagen del proyecto con id ${req.params["id_proyecto"]}, ${error.message}`);
+        res.status(404).json(`No se pudo crear la imagen del proyecto con id ${req.params["id_proyecto"]}, ${error.message}`);
       }
   });
 
@@ -426,11 +426,11 @@ module.exports = function (app) {
         const full_file_path=path.join(dir_name,imagen.rows[0].filepath)
         return res
           .type(imagen.rows[0].mimetype)
-          .sendFile(full_file_path)
+          .jsonFile(full_file_path)
       }
       catch(error)
       {
-        res.status(404).send(`No se pudo obtener la imagen del proyecto con id ${req.params["id_proyecto"]}, ${error.message}`);
+        res.status(404).json(`No se pudo obtener la imagen del proyecto con id ${req.params["id_proyecto"]}, ${error.message}`);
       }
     });
   
@@ -441,7 +441,7 @@ module.exports = function (app) {
       const lista_eventos = await service.get_lista_por_proyecto(proyecto);
       res.status(200).json(lista_eventos.rows);
     }catch(error){
-      res.status(404).send(`No se pudo obtener los eventos del proyecto ${req.params["proyecto"]}, ${error.message}`);
+      res.status(404).json(`No se pudo obtener los eventos del proyecto ${req.params["proyecto"]}, ${error.message}`);
     }
   });
   app.post('/uploadPhoto', upload.array('photos'), async (req, res) => {
@@ -452,12 +452,12 @@ module.exports = function (app) {
       const url = await createImage(req.files[0])
       if (url == "invalid")
       {
-        res.status(400).send("Este formato no es valido, solo se puede jpg, jpeg y png");
+        res.status(400).json("Este formato no es valido, solo se puede jpg, jpeg y png");
         return;
       }
       res.json({ links: url });
     }catch(error){
-      res.status(404).send(`No se pudo guardar la imagen, ${error.message}`);
+      res.status(404).json(`No se pudo guardar la imagen, ${error.message}`);
     }
   });
 };
