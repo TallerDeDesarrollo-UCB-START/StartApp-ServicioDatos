@@ -38,8 +38,7 @@ class EventoServicio {
     try {
       return await this.repository.deleteParticipation(idEvento, idUsuario);//deleteParticipationAnEvent
     } catch (error) {
-      error=new Error("Error al eliminar participacion");//Can not delete participation on the event
-      return error;
+      return new Error("Error al eliminar participacion");
     }
   }
 

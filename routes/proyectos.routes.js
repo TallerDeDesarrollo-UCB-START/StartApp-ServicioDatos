@@ -209,7 +209,7 @@ module.exports = function (app) {
       }
       catch(error)
       {
-        res.status(204).json(sanitizeHtml([]));
+        res.status(204).json([]);
       }
     } catch (error) {
       res.status(404).send(`No se pudo obtener las lista en el proyecto con la categoria ${req.params["categoria"]}, ${error.message}`);
