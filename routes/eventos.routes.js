@@ -4,7 +4,6 @@ const eventService = new EventService(new DbEventRepository());
 
 module.exports = function (app) {
   app.post("/eventos/crearevento", async (req, res) => {
-    //Crear
     try {
       const nuevoEvento = await eventService.createEvent(req.body);
       res.status(201).json(req.body);

@@ -23,10 +23,19 @@ class EventService {
   }
 
   async getEvents(data) {
-    return await this.repository.getEvents(data);
+    try {
+      return await this.repository.getEvents(data); 
+    } catch (error) {
+      return new Error(error)
+    }
   }
   async getCategories(data) {
-    return await this.repository.getCategories(data);
+    try{
+      return await this.repository.getCategories(data);
+    }
+    catch(error){
+      return new Error(error)
+    }
   }
 
   async getAllParticipantsForAnEvent(data) {
@@ -123,7 +132,6 @@ class EventService {
     }
   }
 
-  //Obtener Lideres
   async getLeaders(data) {
     return await this.repository.getLeaders(data);
   }

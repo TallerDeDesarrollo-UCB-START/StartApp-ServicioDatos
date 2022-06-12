@@ -33,7 +33,6 @@ class usuarioServicio {
   }
 
   async do_changes(id, data) {
-    // return await this.repository.UpdateUsuario(id, data);
     try {
       const usuario_a_editar = (await this.repository.GetUsuario(id)).rows[0];
       const data_update = this.completar_form_a_actualizar(
