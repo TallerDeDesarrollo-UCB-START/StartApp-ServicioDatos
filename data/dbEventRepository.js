@@ -101,8 +101,7 @@ class DbEventRepository {
     );
     if (UserExist) {
       const myEvents = await pool.query(
-        `"select * from eventos e where exists (select par.id_evento from participantes_eventos par where par.id_usuario=$1`
-         `and e.id=par.id_evento)"`,
+        "select * from eventos e where exists (select par.id_evento from participantes_eventos par where par.id_usuario=$1 and e.id=par.id_evento)",
         [idAuthentication]
       );
       return myEvents;
