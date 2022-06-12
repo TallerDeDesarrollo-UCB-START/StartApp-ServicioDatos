@@ -34,7 +34,7 @@ module.exports = function (app) {
   app.get("/eventos/participantes/:id", async (req, res) => {
     try {
       const participantes_eventos =
-        await eventService.getAllParticipantsForEvent(req.params["id"]);
+        await eventService.getAllParticipantsForAnEvent(req.params["id"]);
       res.status(200).json(participantes_eventos.rows);
     } catch (error) {
       res.status(404).send(`{"message":"No se pudo obtener los participantes del evento con id ${req.params["id"]}, ${error.message}", "data":false}`);
@@ -54,7 +54,7 @@ module.exports = function (app) {
     async (req, res) => {
       try {
         const { id, id_autenticacion } = req.params;
-        const evento_a_actualizar = await eventService.participateEvent(
+        const evento_a_actualizar = await eventService.participateInEvent(
           id,
           id_autenticacion
         );
