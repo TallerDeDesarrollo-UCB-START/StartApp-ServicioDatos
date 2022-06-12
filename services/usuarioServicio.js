@@ -8,6 +8,7 @@ class usuarioServicio {
     try{
       return await this.repository.GetUsuario(id);
     } catch(error){
+      console.error(error);
       throw error;
     }
   }
@@ -15,6 +16,7 @@ class usuarioServicio {
     try{
       return await this.repository.GetUsuarios();
     } catch(error){
+      console.error(error);
       throw error;
     }
   }
@@ -25,6 +27,7 @@ class usuarioServicio {
       data.estado_de_disponibilidad = "disponible";
       return await this.repository.CreateUsuario(data);
     } catch (error) {
+      console.error(error);
       throw error;
     }
   }
@@ -39,6 +42,7 @@ class usuarioServicio {
       );
       return await this.repository.UpdateUsuario(id, data_update);
     } catch (error) {
+      console.error(error);
       throw error;
     }
   }
@@ -46,7 +50,7 @@ class usuarioServicio {
     try {
       return await this.repository.disableUser(id);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       throw error;
     }
   }
@@ -55,6 +59,7 @@ class usuarioServicio {
     try {
       return await this.repository.GetInsigniasByIdUsuario(id_user);
     } catch (error) {
+      console.error(error);
       throw error;
     }
   }
@@ -63,6 +68,7 @@ class usuarioServicio {
     try {
       return await this.repository.UpdateInsignias(id, data.insignias);
     } catch (error) {
+      console.error(error);
       throw error;
     }
   }
@@ -71,6 +77,7 @@ class usuarioServicio {
     try {
       return await this.repository.GetInsignias();
     } catch (error) {
+      console.error(error);
       throw error;
     }
   }
@@ -100,6 +107,7 @@ class usuarioServicio {
       }
       return data;
     } catch (error) {
+      console.error(error);
       throw error;
     }
   }
