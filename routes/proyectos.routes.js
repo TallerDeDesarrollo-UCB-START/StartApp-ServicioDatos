@@ -48,10 +48,6 @@ module.exports = function (app) {
       }
       const nuevoProyecto = await service.create_proyecto(req.body);
       const id=nuevoProyecto.rows[0].id;
-      if(url != "")
-      {
-        await service.create_imagen(imageFile.filename,imageFile.mimetype,imageFile.size,url,id);   
-      }
       res.status(201).json(nuevoProyecto.rows);
     } catch (error) {
       res.status(404).send(`No se pudo crear el proyecto, ${error.message}`);
@@ -80,10 +76,6 @@ module.exports = function (app) {
         req.body.url_imagen = url;
       }
       const proyectoActualizado = await service.update_proyecto(id, req.body);
-      if(url != "")
-      {
-        await service.create_imagen(imageFile.filename,imageFile.mimetype,imageFile.size,url,id);   
-      }
       if(proyectoActualizado.rows.length > 0)
       {
         res.status(200).json(proyectoActualizado.rows);
