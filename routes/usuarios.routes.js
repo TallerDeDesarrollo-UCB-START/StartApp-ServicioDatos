@@ -58,7 +58,7 @@ module.exports = function (app) {
         message : "",
         data : volunteers.rows
       }
-      res.status(200).json(elem);
+      res.status(200).send(`{"message":"", "data": ${data_to_send}}`);
     } catch (err) {
       console.error(err.message);
       res.status(404).send(`{ "message": "No hay usuarios", "data": ""}`);
