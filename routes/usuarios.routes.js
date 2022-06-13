@@ -1,11 +1,6 @@
 const UsuarioServicio = require("../services/usuarioServicio");
 const usuarioService = new UsuarioServicio();
-const requestObject = (messageRequest, dataRequest) =>{
-  return  {
-    message: messageRequest,
-    data: dataRequest
-  }
-}
+
 module.exports = function (app) {
   app.post("/extended_form", async (req, res) => {
     try {
@@ -44,11 +39,14 @@ module.exports = function (app) {
         req.params.id
       );
       let data_to_send = JSON.stringify(newVolunteer.rows[0]);
-      res.status(200).json(requestObject("",newVolunteer));
+      res.status(200).send(`{"message":"", "data": ${data_to_send}}`);
     } catch (err) {
       console.error(err.message);
       res
-        .status(204).json(requestObject(`El voluntario con id ${req.params.id} no existe,newVolunteer)`,""))
+        .status(204).status(204)
+        .send(
+          `{ "message": "El voluntario con id ${req.params.id} no existe"", "data": ""}`
+        );
     }
   });
 
